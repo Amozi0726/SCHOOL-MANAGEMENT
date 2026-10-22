@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance | School Management System</title>
+
+    <style>
+        :root {
+            --primary: #175cd3;
+            --primary-dark: #1249aa;
+            --background: #f4f7fb;
+            --white: #ffffff;
+            --text: #243247;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #067647;
+            --danger: #b42318;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .topbar {
+            background: var(--white);
+            padding: 20px 5%;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #eaf1ff;
+            color: var(--primary);
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .brand h2 { margin: 0; font-size: 19px; }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .system-label {
+            color: var(--primary);
+            background: #edf4ff;
+            padding: 9px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 5%;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .page-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .date-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .date-label strong {
+            display: block;
+            margin-top: 6px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 10px #17255408;
+        }
+
+        .summary-card p {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 0 0 12px;
+        }
+
+        .summary-card h2 {
+            font-size: 29px;
+            margin: 0;
+        }
+
+        .summary-card .small-note {
+            margin-top: 9px;
+            margin-bottom: 0;
+            font-size: 12px;
+        }
+
+        .blue { color: var(--primary); }
+        .green { color: var(--success); }
+        .red { color: var(--danger); }
+
+        .panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #17255408;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .panel-heading {
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-heading h2 {
+            margin: 0 0 7px;
+            font-size: 18px;
+        }
+
+        .panel-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .filters {
+            padding: 20px 24px;
+            display: flex;
+            align-items: end;
+            gap: 14px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            background: #fbfcfe;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 180px;
+            flex: 1;
+        }
+
+        .filter-group label {
+            color: #475569;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            min-height: 42px;
+            padding: 10px 12px;
+            font: inherit;
+            font-size: 13px;
+            border-radius: 7px;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--white);
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #bfdbfe;
+            border-color: var(--primary);
+        }
+
+        button {
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: var(--primary-dark); }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .refresh-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .table-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            flex-wrap: wrap;
+        }
+
+        .record-count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: #f4f7fb;
+            color: #475569;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        td { font-size: 13px; }
+        tbody tr:hover { background: #f9fbff; }
+
+        .student-name {
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .admission {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .status-present { color: #067647; background: #ecfdf3; }
+        .status-absent { color: #b42318; background: #fef3f2; }
+        .status-late { color: #b54708; background: #fffaeb; }
+        .status-excused { color: #175cd3; background: #eff8ff; }
+
+        .empty-cell {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .message {
+            margin: 0;
+            padding: 12px 24px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .message.error {
+            color: var(--danger);
+            background: #fef3f2;
+        }
+
+        .message.success { color: var(--success); }
+
+        .footer {
+            text-align: center;
+            padding: 25px 10px 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 750px) {
+            .topbar { padding: 16px 5%; }
+            .container { padding: 24px 4%; }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .summary-card { padding: 18px; }
+            .summary-card h2 { font-size: 25px; }
+            .page-heading h1 { font-size: 24px; }
+            .filters { padding: 18px; }
+            .filter-group { width: 100%; min-width: 0; }
+            .refresh-button { width: 100%; }
+            .panel-heading { padding: 20px 18px; }
+            .table-meta { padding: 15px 18px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon" aria-hidden="true">S</div>
+            <div>
+                <h2>School Management System</h2>
+                <p>Administration Portal</p>
+            </div>
+        </div>
+        <span class="system-label">ATTENDANCE MANAGEMENT</span>
+    </header>
+
+    <main class="container">
+        <section class="page-heading">
+            <div>
+                <h1>Student Attendance</h1>
+                <p>Monitor and manage student attendance records.</p>
+            </div>
+            <div class="date-label">
+                Current date
+                <strong id="currentDate">Loading date...</strong>
+            </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Attendance summary">
+            <div class="summary-card">
+                <p>Total Records Loaded</p>
+                <h2 class="blue" id="totalCount">0</h2>
+                <p class="small-note">Records returned by the server</p>
+            </div>
+            <div class="summary-card">
+                <p>Present in Filtered Records</p>
+                <h2 class="green" id="presentCount">0</h2>
+                <p class="small-note">Students marked present</p>
+            </div>
+            <div class="summary-card">
+                <p>Absent in Filtered Records</p>
+                <h2 class="red" id="absentCount">0</h2>
+                <p class="small-note">Students marked absent</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Mark Student Attendance</h2>
+                <p>Select a student, choose a status and save the record.</p>
+            </div>
+
+            <form id="attendanceForm" class="filters">
+                <div class="filter-group">
+                    <label for="studentSelect">Student</label>
+                    <select id="studentSelect" required>
+                        <option value="">Loading students...</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="markDate">Attendance Date</label>
+                    <input type="date" id="markDate" required>
+                </div>
+
+                <div class="filter-group">
+                    <label for="attendanceStatus">Attendance Status</label>
+                    <select id="attendanceStatus" required>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Late">Late</option>
+                        <option value="Excused">Excused</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="attendanceRemarks">Remarks (optional)</label>
+                    <input type="text" id="attendanceRemarks"
+                           maxlength="255" placeholder="Enter remarks">
+                </div>
+
+                <button type="submit" id="saveAttendanceButton">
+                    Save Attendance
+                </button>
+            </form>
+
+            <p id="formMessage" class="message"
+               role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Attendance Records</h2>
+                <p>Filter saved records by date or class.</p>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="attendanceDate">Attendance Date</label>
+                    <input type="date" id="attendanceDate">
+                </div>
+
+                <div class="filter-group">
+                    <label for="classFilter">Class</label>
+                    <select id="classFilter">
+                        <option value="">All classes</option>
+                    </select>
+                </div>
+
+                <button class="refresh-button" id="refreshButton" type="button">
+                    ↻ Refresh Records
+                </button>
+            </div>
+
+            <p id="message" class="message"
+               role="status" aria-live="polite">Loading attendance records...</p>
+
+            <div class="table-meta">
+                <span class="record-count" id="recordCount">
+                    Preparing records...
+                </span>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission No.</th>
+                            <th>Student Name</th>
+                            <th>Class</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTable">
+                        <tr>
+                            <td colspan="6" class="empty-cell">Loading records...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            School Management System &copy; <span id="year"></span>
+            | Attendance Management
+        </footer>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const tableBody = document.getElementById("attendanceTable");
+        const message = document.getElementById("message");
+        const classFilter = document.getElementById("classFilter");
+        const dateFilter = document.getElementById("attendanceDate");
+        const refreshButton = document.getElementById("refreshButton");
+
+        const studentSelect = document.getElementById("studentSelect");
+        const markDate = document.getElementById("markDate");
+        const attendanceForm = document.getElementById("attendanceForm");
+        const formMessage = document.getElementById("formMessage");
+        const saveButton = document.getElementById("saveAttendanceButton");
+
+        let allRecords = [];
+
+        function getToday() {
+            const parts = new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Africa/Nairobi",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }).formatToParts(new Date());
+
+            const get = type => parts.find(p => p.type === type).value;
+
+            return `${get("year")}-${get("month")}-${get("day")}`;
+        }
+
+        function formatLongDate(value) {
+            return new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Africa/Nairobi",
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }).format(new Date(`${value}T12:00:00`));
+        }
+
+        function getAttendanceDate(value) {
+            if (!value) return "";
+
+            const raw = String(value);
+
+            if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+                return raw;
+            }
+
+            const date = new Date(raw);
+
+            if (Number.isNaN(date.getTime())) {
+                return raw.slice(0, 10);
+            }
+
+            const parts = new Intl.DateTimeFormat("en-GB", {
+                timeZone: "Africa/Nairobi",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }).formatToParts(date);
+
+            const get = type => parts.find(p => p.type === type).value;
+
+            return `${get("year")}-${get("month")}-${get("day")}`;
+        }
+
+        function showMessage(text, type = "") {
+            message.textContent = text;
+            message.className = "message" + (type ? " " + type : "");
+        }
+
+        function showFormMessage(text, type = "") {
+            formMessage.textContent = text;
+            formMessage.className = "message" + (type ? " " + type : "");
+        }
+
+        function addCell(row, value, className = "") {
+            const cell = document.createElement("td");
+            cell.textContent = value ?? "";
+
+            if (className) {
+                cell.className = className;
+            }
+
+            row.appendChild(cell);
+        }
+
+        function addStatusCell(row, status) {
+            const cell = document.createElement("td");
+            const badge = document.createElement("span");
+            const value = String(status || "Unknown");
+
+            badge.className = "status status-" + value.toLowerCase();
+            badge.textContent = value;
+
+            cell.appendChild(badge);
+            row.appendChild(cell);
+        }
+
+        function updateClassOptions(records) {
+            const previous = classFilter.value;
+
+            const classes = [...new Set(
+                records.map(record => record.class_name).filter(Boolean)
+            )].sort();
+
+            classFilter.replaceChildren();
+
+            const allOption = document.createElement("option");
+            allOption.value = "";
+            allOption.textContent = "All classes";
+            classFilter.appendChild(allOption);
+
+            classes.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                classFilter.appendChild(option);
+            });
+
+            classFilter.value = classes.includes(previous) ? previous : "";
+        }
+
+        function renderAttendance() {
+            tableBody.replaceChildren();
+
+            const selectedDate = dateFilter.value;
+            const selectedClass = classFilter.value;
+
+            const filtered = allRecords.filter(record => {
+                const dateMatches = !selectedDate ||
+                    getAttendanceDate(record.attendance_date) === selectedDate;
+
+                const classMatches = !selectedClass ||
+                    record.class_name === selectedClass;
+
+                return dateMatches && classMatches;
+            });
+
+            document.getElementById("totalCount").textContent =
+                allRecords.length;
+
+            document.getElementById("presentCount").textContent =
+                filtered.filter(record =>
+                    String(record.status).toLowerCase() === "present"
+                ).length;
+
+            document.getElementById("absentCount").textContent =
+                filtered.filter(record =>
+                    String(record.status).toLowerCase() === "absent"
+                ).length;
+
+            document.getElementById("recordCount").textContent =
+                `Showing ${filtered.length} of ${allRecords.length} attendance record(s).`;
+
+            if (filtered.length === 0) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 6;
+                cell.className = "empty-cell";
+                cell.textContent = allRecords.length === 0
+                    ? "No attendance records returned by the server."
+                    : "No records match these filters. Try another date or select All classes.";
+
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+                return;
+            }
+
+            filtered.forEach(record => {
+                const row = document.createElement("tr");
+
+                const name = [
+                    record.first_name,
+                    record.last_name
+                ].filter(Boolean).join(" ");
+
+                addCell(row, record.admission_number || "—", "admission");
+                addCell(row, name || "—", "student-name");
+                addCell(row, record.class_name || "—");
+                addCell(row, getAttendanceDate(record.attendance_date) || "—");
+                addStatusCell(row, record.status);
+                addCell(row, record.remarks || "—");
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function loadStudents() {
+            studentSelect.disabled = true;
+            studentSelect.replaceChildren();
+
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = "Loading students...";
+            studentSelect.appendChild(placeholder);
+
+            const date = markDate.value;
+
+            // Use the selected class, or the first available class.
+            const className = classFilter.value ||
+                [...classFilter.options]
+                    .map(option => option.value)
+                    .find(value => value !== "");
+
+            if (!className || !date) {
+                placeholder.textContent = className
+                    ? "Select an attendance date"
+                    : "No class available in attendance records";
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    class_name: className,
+                    date: date
+                });
+
+                const response = await fetch(
+                    `${API_URL}/attendance/students?${params.toString()}`
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || result.success !== true) {
+                    throw new Error(
+                        result.message || "Unable to load students."
+                    );
+                }
+
+                const students = Array.isArray(result.data)
+                    ? result.data
+                    : [];
+
+                studentSelect.replaceChildren();
+
+                const selectOption = document.createElement("option");
+                selectOption.value = "";
+                selectOption.textContent = students.length
+                    ? "Select a student"
+                    : "No students found";
+
+                studentSelect.appendChild(selectOption);
+
+                students.forEach(student => {
+                    const option = document.createElement("option");
+                    option.value = student.student_id;
+
+                    const name = [
+                        student.first_name,
+                        student.last_name
+                    ].filter(Boolean).join(" ");
+
+                    option.textContent =
+                        `${student.admission_number || ""} - ${name}`;
+
+                    studentSelect.appendChild(option);
+                });
+
+                studentSelect.disabled = students.length === 0;
+
+                showFormMessage(
+                    students.length
+                        ? `${students.length} student(s) loaded.`
+                        : "No students found for this class and date."
+                );
+            } catch (error) {
+                console.error("Error loading students:", error);
+
+                studentSelect.replaceChildren();
+
+                const option = document.createElement("option");
+                option.value = "";
+                option.textContent = "Failed to load students";
+                studentSelect.appendChild(option);
+
+                showFormMessage(error.message, "error");
+            }
+        }
+
+        async function loadAttendance() {
+            refreshButton.disabled = true;
+            refreshButton.textContent = "Loading...";
+            showMessage("Loading attendance records...");
+
+            try {
+                const response = await fetch(`${API_URL}/attendance`);
+                const result = await response.json();
+
+                if (!response.ok || result.success !== true) {
+                    throw new Error(
+                        result.message || "Unable to load attendance."
+                    );
+                }
+
+                allRecords = Array.isArray(result.data) ? result.data : [];
+
+                updateClassOptions(allRecords);
+                renderAttendance();
+
+                showMessage(
+                    allRecords.length
+                        ? "Attendance records loaded successfully."
+                        : "Connected to the server, but no records were returned.",
+                    allRecords.length ? "success" : ""
+                );
+
+                await loadStudents();
+            } catch (error) {
+                console.error("Attendance loading error:", error);
+
+                allRecords = [];
+                updateClassOptions(allRecords);
+                renderAttendance();
+
+                showMessage(
+                    error.message || "Unable to load attendance. Check Node.js.",
+                    "error"
+                );
+            } finally {
+                refreshButton.disabled = false;
+                refreshButton.textContent = "↻ Refresh Records";
+            }
+        }
+
+        attendanceForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const studentId = studentSelect.value;
+            const attendanceDate = markDate.value;
+            const status =
+                document.getElementById("attendanceStatus").value;
+            const remarks =
+                document.getElementById("attendanceRemarks").value.trim();
+
+            if (!studentId || !attendanceDate || !status) {
+                showFormMessage(
+                    "Select a student, date and status.",
+                    "error"
+                );
+                return;
+            }
+
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+
+            try {
+                const response = await fetch(`${API_URL}/attendance`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        student_id: Number(studentId),
+                        attendance_date: attendanceDate,
+                        status: status,
+                        remarks: remarks
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.success !== true) {
+                    throw new Error(
+                        result.message || "Failed to save attendance."
+                    );
+                }
+
+                showFormMessage(
+                    result.message || "Attendance saved successfully.",
+                    "success"
+                );
+
+                dateFilter.value = attendanceDate;
+                document.getElementById("attendanceRemarks").value = "";
+
+                await loadAttendance();
+            } catch (error) {
+                console.error("Save attendance error:", error);
+                showFormMessage(error.message, "error");
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = "Save Attendance";
+            }
+        });
+
+        refreshButton.addEventListener("click", loadAttendance);
+
+        classFilter.addEventListener("change", () => {
+            renderAttendance();
+            loadStudents();
+        });
+
+        dateFilter.addEventListener("change", renderAttendance);
+        markDate.addEventListener("change", loadStudents);
+
+        document.getElementById("currentDate").textContent =
+            formatLongDate(getToday());
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+        dateFilter.value = getToday();
+        markDate.value = getToday();
+
+        loadAttendance();
+    </script>
+</body>
+</html>

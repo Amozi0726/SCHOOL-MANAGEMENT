@@ -1,0 +1,703 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance History | St Peters Marakwet High School</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 24px 5%;
+        }
+
+        header h1 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #dce7f5;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            margin-bottom: 24px;
+        }
+
+        .intro h2 {
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel h3 {
+            color: #17365d;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .student-selection {
+            max-width: 550px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #17365d;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #243247;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #message {
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .student-profile {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .profile-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 7px;
+            padding: 16px;
+        }
+
+        .profile-item span {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .profile-item strong {
+            color: #17365d;
+            font-size: 16px;
+            overflow-wrap: anywhere;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #dbe3ee;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .summary-card p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .summary-card h3 {
+            font-size: 25px;
+            color: #17365d;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+
+        th {
+            background: #edf2f7;
+            color: #17365d;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        .report-footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            margin: 25px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .student-profile,
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 21px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 12mm;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            header {
+                background: white;
+                color: black;
+                border-bottom: 2px solid #17365d;
+                padding: 10px 0;
+            }
+
+            header p {
+                color: #333;
+            }
+
+            .intro,
+            .selection-panel,
+            .no-print {
+                display: none !important;
+            }
+
+            main {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .panel {
+                padding: 0;
+                box-shadow: none;
+                border: none;
+            }
+
+            .summary-card,
+            .profile-item {
+                break-inside: avoid;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            th {
+                background: #edf2f7 !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            table {
+                min-width: 0;
+            }
+
+            th, td {
+                font-size: 10px;
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>ST PETERS MARAKWET HIGH SCHOOL</h1>
+        <p>Academic Performance and Student History Reports</p>
+    </header>
+
+    <main>
+        <div class="intro">
+            <h2>Student Performance History</h2>
+            <p>
+                View a student's recorded examination results across different
+                examinations and review their academic progress over time.
+            </p>
+        </div>
+
+        <section class="panel selection-panel">
+            <h3>Select Student</h3>
+
+            <div class="student-selection">
+                <label for="studentSelect">Student Name</label>
+                <select id="studentSelect">
+                    <option value="">Loading students...</option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="primary-btn" id="viewBtn">
+                    View Performance History
+                </button>
+
+                <button type="button" class="secondary-btn" id="printBtn">
+                    Print / Save PDF
+                </button>
+            </div>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section id="historyReport" class="hidden">
+            <section class="panel">
+                <h3>Student Information</h3>
+
+                <div class="student-profile">
+                    <div class="profile-item">
+                        <span>Student Name</span>
+                        <strong id="studentName">-</strong>
+                    </div>
+
+                    <div class="profile-item">
+                        <span>Admission Number</span>
+                        <strong id="admissionNumber">-</strong>
+                    </div>
+
+                    <div class="profile-item">
+                        <span>Current Class</span>
+                        <strong id="studentClass">-</strong>
+                    </div>
+                </div>
+
+                <h3>Academic Summary</h3>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <p>Recorded Examinations</p>
+                        <h3 id="examCount">0</h3>
+                    </div>
+
+                    <div class="summary-card">
+                        <p>Average Percentage</p>
+                        <h3 id="averagePercentage">-</h3>
+                    </div>
+
+                    <div class="summary-card">
+                        <p>Highest Percentage</p>
+                        <h3 id="highestPercentage">-</h3>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h3>Examination History</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Examination</th>
+                                <th>Subject</th>
+                                <th>Class</th>
+                                <th>Term</th>
+                                <th>Year</th>
+                                <th>Marks</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="historyBody">
+                            <tr>
+                                <td colspan="10" class="empty">
+                                    Select a student to view results.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <p class="report-footer">
+                St Peters Marakwet High School — Student Academic History
+            </p>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const studentSelect = document.getElementById("studentSelect");
+        const message = document.getElementById("message");
+        const historyReport = document.getElementById("historyReport");
+        const historyBody = document.getElementById("historyBody");
+
+        let students = [];
+        let examinations = [];
+        let displayedHistory = false;
+
+        function showMessage(text, success = false) {
+            message.textContent = text;
+            message.style.color = success ? "#15803d" : "#dc2626";
+        }
+
+        async function getApiData(url) {
+            const response = await fetch(url);
+            const result = await response.json();
+
+            if (!response.ok || result.success === false) {
+                throw new Error(
+                    result.message || "The server could not return the requested data."
+                );
+            }
+
+            const data = Array.isArray(result) ? result : result.data;
+
+            if (!Array.isArray(data)) {
+                throw new Error("The server returned data in an unexpected format.");
+            }
+
+            return data;
+        }
+
+        function setText(id, value) {
+            document.getElementById(id).textContent = value ?? "-";
+        }
+
+        function addCell(row, value) {
+            const cell = document.createElement("td");
+            cell.textContent = value ?? "-";
+            row.appendChild(cell);
+        }
+
+        function resetHistory() {
+            displayedHistory = false;
+            historyReport.classList.add("hidden");
+        }
+
+        async function loadInitialData() {
+            studentSelect.replaceChildren(
+                new Option("Loading students...", "")
+            );
+
+            try {
+                const data = await Promise.all([
+                    getApiData(`${API_URL}/students`),
+                    getApiData(`${API_URL}/examinations`)
+                ]);
+
+                students = data[0];
+                examinations = data[1];
+
+                studentSelect.replaceChildren(
+                    new Option("Select a student", "")
+                );
+
+                students.forEach(student => {
+                    const fullName =
+                        `${student.first_name} ${student.last_name}`;
+
+                    studentSelect.add(
+                        new Option(
+                            `${fullName} (${student.admission_number})`,
+                            student.student_id
+                        )
+                    );
+                });
+
+                if (students.length === 0) {
+                    studentSelect.add(
+                        new Option("No students found", "")
+                    );
+                }
+
+                if (examinations.length === 0) {
+                    showMessage(
+                        "Students loaded, but no examinations have been recorded yet."
+                    );
+                } else {
+                    showMessage("Students and examinations loaded successfully.", true);
+                }
+            } catch (error) {
+                studentSelect.replaceChildren(
+                    new Option("Could not load students", "")
+                );
+
+                showMessage(
+                    "Could not load data. Check that your backend is running. " +
+                    error.message
+                );
+            }
+        }
+
+        async function viewHistory() {
+            const studentId = studentSelect.value;
+
+            if (!studentId) {
+                showMessage("Please select a student first.");
+                resetHistory();
+                return;
+            }
+
+            const student = students.find(
+                item => String(item.student_id) === String(studentId)
+            );
+
+            if (!student) {
+                showMessage("The selected student could not be found.");
+                resetHistory();
+                return;
+            }
+
+            showMessage("Loading the student's examination history...");
+            resetHistory();
+
+            try {
+                // Each examination has its own saved results.
+                // Fetch each examination's results and keep only this student.
+                const historyGroups = await Promise.all(
+                    examinations.map(async exam => {
+                        const results = await getApiData(
+                            `${API_URL}/exam-results?exam_id=` +
+                            encodeURIComponent(exam.exam_id)
+                        );
+
+                        return results
+                            .filter(result =>
+                                String(result.student_id) ===
+                                String(student.student_id)
+                            )
+                            .map(result => ({
+                                exam: exam,
+                                result: result
+                            }));
+                    })
+                );
+
+                const history = historyGroups.flat();
+
+                // Sort by examination date, oldest first.
+                history.sort((a, b) => {
+                    const dateA = a.exam.exam_date
+                        ? new Date(a.exam.exam_date).getTime()
+                        : 0;
+
+                    const dateB = b.exam.exam_date
+                        ? new Date(b.exam.exam_date).getTime()
+                        : 0;
+
+                    return dateA - dateB;
+                });
+
+                setText(
+                    "studentName",
+                    `${student.first_name} ${student.last_name}`
+                );
+                setText("admissionNumber", student.admission_number);
+                setText("studentClass", student.class_name || "-");
+
+                setText("examCount", history.length);
+
+                historyBody.replaceChildren();
+
+                if (history.length === 0) {
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+
+                    cell.colSpan = 10;
+                    cell.className = "empty";
+                    cell.textContent =
+                        "No examination results have been saved for this student yet.";
+
+                    row.appendChild(cell);
+                    historyBody.appendChild(row);
+
+                    setText("averagePercentage", "-");
+                    setText("highestPercentage", "-");
+                } else {
+                    let totalPercentage = 0;
+                    let highest = -Infinity;
+
+                    history.forEach((item, index) => {
+                        const exam = item.exam;
+                        const result = item.result;
+
+                        const marks = Number(result.marks_obtained);
+                        const maxMarks = Number(exam.max_marks);
+
+                        if (
+                            !Number.isFinite(marks) ||
+                            !Number.isFinite(maxMarks) ||
+                            maxMarks <= 0
+                        ) {
+                            throw new Error(
+                                "An examination contains invalid marks or maximum marks."
+                            );
+                        }
+
+                        const percentage = marks / maxMarks * 100;
+
+                        totalPercentage += percentage;
+                        highest = Math.max(highest, percentage);
+
+                        const row = document.createElement("tr");
+
+                        addCell(row, index + 1);
+                        addCell(row, exam.exam_name);
+                        addCell(row, exam.subject_name || "-");
+                        addCell(row, exam.class_name || "-");
+                        addCell(row, exam.term || "-");
+                        addCell(row, exam.academic_year || "-");
+                        addCell(
+                            row,
+                            `${marks.toFixed(2)} / ${maxMarks.toFixed(2)}`
+                        );
+                        addCell(row, `${percentage.toFixed(2)}%`);
+                        addCell(row, result.grade || "-");
+                        addCell(row, result.remarks || "-");
+
+                        historyBody.appendChild(row);
+                    });
+
+                    const average = totalPercentage / history.length;
+
+                    setText(
+                        "averagePercentage",
+                        `${average.toFixed(2)}%`
+                    );
+                    setText(
+                        "highestPercentage",
+                        `${highest.toFixed(2)}%`
+                    );
+                }
+
+                historyReport.classList.remove("hidden");
+                displayedHistory = true;
+
+                showMessage(
+                    "Student performance history loaded successfully.",
+                    true
+                );
+            } catch (error) {
+                resetHistory();
+                showMessage(
+                    "Could not load performance history: " + error.message
+                );
+            }
+        }
+
+        document.getElementById("viewBtn").addEventListener(
+            "click",
+            viewHistory
+        );
+
+        document.getElementById("printBtn").addEventListener(
+            "click",
+            function() {
+                if (!displayedHistory) {
+                    showMessage(
+                        "Please view a student's history before printing."
+                    );
+                    return;
+                }
+
+                window.print();
+            }
+        );
+
+        studentSelect.addEventListener("change", resetHistory);
+
+        loadInitialData();
+    </script>
+</body>
+</html>

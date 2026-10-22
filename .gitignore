@@ -1,0 +1,18 @@
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and logs
+node_modules/
+*.log
+npm-debug.log*
+
+# Local database backups
+*.sql
+*.sql.zip
+
+# Operating system files
+.DS_Store
+Thumbs.db

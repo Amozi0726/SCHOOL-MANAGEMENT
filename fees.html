@@ -1,0 +1,1777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fees Management | St Peters Marakwet High School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f4f7fb;
+    color: #263445;
+}
+
+header {
+    background: #12345a;
+    color: white;
+    text-align: center;
+    padding: 22px;
+}
+
+header h1 {
+    margin: 0 0 8px;
+    font-size: 25px;
+}
+
+header p {
+    margin: 0;
+    color: #d7e5f5;
+}
+
+main {
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 0 20px 30px;
+}
+
+.page-heading {
+    margin-bottom: 20px;
+}
+
+.page-heading p {
+    color: #68778a;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card,
+.panel {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.03);
+}
+
+.summary-card p {
+    color: #68778a;
+    font-size: 14px;
+}
+
+.summary-card h3 {
+    color: #12345a;
+    overflow-wrap: anywhere;
+}
+
+.panel h3 {
+    color: #12345a;
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd5e0;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    color: #263445;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.primary-btn {
+    background: #1763a6;
+    color: white;
+}
+
+.secondary-btn {
+    background: #e8edf4;
+    color: #263445;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.balance-preview {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: #edf5ff;
+    padding: 16px;
+    margin-top: 12px;
+    border-radius: 8px;
+}
+
+.balance-preview strong {
+    color: #12345a;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5eaf0;
+    font-size: 13px;
+}
+
+th {
+    background: #f0f4f8;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.paid {
+    color: #167344;
+    background: #dcfce7;
+}
+
+.partial {
+    color: #985b00;
+    background: #fef3c7;
+}
+
+.unpaid {
+    color: #b42318;
+    background: #fee2e2;
+}
+
+#message,
+#paymentReceiptMessage {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.receipt {
+    max-width: 760px;
+    margin: 20px auto;
+    padding: 24px;
+    background: white;
+    border: 1px solid #ddd;
+    color: #111;
+}
+
+.receipt-heading {
+    text-align: center;
+    border-bottom: 2px solid #1f3a5f;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
+.receipt-heading h2 {
+    margin-bottom: 8px;
+}
+
+.receipt-details p {
+    margin: 10px 0;
+    overflow-wrap: anywhere;
+}
+
+.receipt-total {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+
+.receipt-total p {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.receipt-thank-you {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 12px;
+    border-top: 1px solid #ccc;
+}
+
+.receipt-signatures {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.signature-box {
+    width: 48%;
+}
+
+.signature-line {
+    height: 25px;
+    border-bottom: 1px solid #222;
+}
+
+.stamp-box {
+    width: 120px;
+    height: 60px;
+    border: 1px dashed #777;
+    margin-top: 12px;
+}
+
+.printable-statement {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #718096;
+    font-size: 13px;
+}
+
+@media (max-width: 800px) {
+    .summary,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 16px;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    .receipt {
+        padding: 15px;
+    }
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    body.printing-receipt *,
+    body.printing-statement *,
+    body.printing-all-fees * {
+        visibility: hidden !important;
+    }
+
+    body.printing-receipt #printablePaymentReceipt,
+    body.printing-receipt #printablePaymentReceipt *,
+    body.printing-statement #printableStatement,
+    body.printing-statement #printableStatement *,
+    body.printing-all-fees main,
+    body.printing-all-fees main * {
+        visibility: visible !important;
+    }
+
+    body.printing-receipt #printablePaymentReceipt,
+    body.printing-statement #printableStatement {
+        display: block !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    body.printing-receipt #printablePaymentReceipt table,
+    body.printing-statement #printableStatement table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: collapse;
+    }
+
+    body.printing-receipt #printablePaymentReceipt th,
+    body.printing-receipt #printablePaymentReceipt td,
+    body.printing-statement #printableStatement th,
+    body.printing-statement #printableStatement td {
+        padding: 8px;
+        font-size: 10pt;
+        border: 1px solid #999;
+    }
+
+    body.printing-receipt #printablePaymentReceipt {
+        font-size: 10pt;
+    }
+
+    body.printing-all-fees header,
+    body.printing-all-fees footer,
+    body.printing-all-fees .page-heading,
+    body.printing-all-fees .summary,
+    body.printing-all-fees .form-panel,
+    body.printing-all-fees .print-actions,
+    body.printing-all-fees #paymentReceiptPanel,
+    body.printing-all-fees #printablePaymentReceipt,
+    body.printing-all-fees #printableStatement {
+        display: none !important;
+    }
+
+    body.printing-all-fees main {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    body.printing-all-fees .panel {
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+    }
+
+    body.printing-all-fees th,
+    body.printing-all-fees td {
+        padding: 5px;
+        font-size: 9pt;
+        border: 1px solid #999;
+    }
+
+    body.printing-all-fees table {
+        min-width: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>ST PETERS MARAKWET HIGH SCHOOL</h1>
+    <p>School Management System | Finance Department</p>
+</header>
+
+<main>
+    <div class="page-heading">
+        <h2>Fees Management</h2>
+        <p>Record school fees, track payments, and print official receipts.</p>
+    </div>
+
+    <section class="summary">
+        <div class="summary-card">
+            <p>Total Fees Charged</p>
+            <h3 id="totalCharged">KES 0.00</h3>
+        </div>
+
+        <div class="summary-card">
+            <p>Total Payments Recorded</p>
+            <h3 id="totalPaid">KES 0.00</h3>
+        </div>
+
+        <div class="summary-card">
+            <p>Total Outstanding Balance</p>
+            <h3 id="totalBalance">KES 0.00</h3>
+        </div>
+    </section>
+
+    <section class="panel form-panel">
+        <h3>Record Student Fees</h3>
+
+        <form id="feesForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="student">Select Student</label>
+                    <select id="student" required>
+                        <option value="">Loading students...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="term">Term</label>
+                    <select id="term" required>
+                        <option value="">Select term</option>
+                        <option value="Term 1">Term 1</option>
+                        <option value="Term 2">Term 2</option>
+                        <option value="Term 3">Term 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Academic Year</label>
+                    <input type="number" id="year" min="2020"
+                           max="2100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="feesCharged">Total Fees Required (KES)</label>
+                    <input type="number" id="feesCharged" min="0.01"
+                           step="0.01" placeholder="e.g. 25000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="amountPaid">Amount Paid Now (KES)</label>
+                    <input type="number" id="amountPaid" min="0"
+                           step="0.01" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentDate">Payment Date</label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="">Select method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="M-Pesa">M-Pesa</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Cheque">Cheque</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="receiptNumberInput">Receipt Number</label>
+                    <input type="text" id="receiptNumberInput"
+                           placeholder="e.g. RCP001">
+                </div>
+            </div>
+
+            <div class="balance-preview">
+                <span>Outstanding Balance Preview</span>
+                <strong id="balancePreview">KES 0.00</strong>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="primary-btn"
+                        id="saveFeesButton">
+                    Record Fees
+                </button>
+
+                <button type="reset" class="secondary-btn">
+                    Clear Form
+                </button>
+            </div>
+
+            <p id="message" role="status" aria-live="polite"></p>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h3>Fees Records</h3>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="statementStudentSelect">
+                    Select Student for Statement
+                </label>
+                <select id="statementStudentSelect">
+                    <option value="">Loading students...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="statementTermSelect">
+                    Select Term / Academic Year
+                </label>
+                <select id="statementTermSelect">
+                    <option value="">Loading terms...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Admission No.</th>
+                        <th>Term / Year</th>
+                        <th>Fees Charged</th>
+                        <th>Paid</th>
+                        <th>Balance</th>
+                        <th>Status</th>
+                        <th>Receipt No.</th>
+                    </tr>
+                </thead>
+
+                <tbody id="feesTableBody">
+                    <tr>
+                        <td colspan="8">Loading fee records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions print-actions">
+            <button type="button" class="primary-btn"
+                    id="printStatementButton">
+                Print Fee Statement
+            </button>
+
+            <button type="button" class="secondary-btn"
+                    id="printAllFeesButton">
+                Print All Fees Report
+            </button>
+
+            <button type="button" class="secondary-btn"
+                    id="refreshFeesButton">
+                Refresh Records
+            </button>
+        </div>
+    </section>
+
+    <section class="panel" id="paymentReceiptPanel">
+        <h3>Print Individual Payment Receipt</h3>
+        <p>Select a recorded payment to print its official receipt.</p>
+
+        <div class="form-group">
+            <label for="paymentReceiptSelect">Select Payment</label>
+            <select id="paymentReceiptSelect">
+                <option value="">Loading payment receipts...</option>
+            </select>
+        </div>
+
+        <div class="actions print-actions">
+            <button type="button" class="primary-btn"
+                    id="printPaymentReceiptButton">
+                Print Payment Receipt
+            </button>
+
+            <button type="button" class="secondary-btn"
+                    id="refreshPaymentReceiptsButton">
+                Refresh Payment Receipts
+            </button>
+        </div>
+
+        <p id="paymentReceiptMessage" role="status"
+           aria-live="polite"></p>
+    </section>
+
+    <section id="printablePaymentReceipt" class="receipt">
+        <div class="receipt-heading">
+            <h2>ST PETERS MARAKWET HIGH SCHOOL</h2>
+            <h3>OFFICIAL FEE PAYMENT RECEIPT</h3>
+            <p>Finance Department</p>
+        </div>
+
+        <div class="receipt-details">
+            <p><strong>Receipt Number:</strong>
+                <span id="receiptNumber"></span></p>
+
+            <p><strong>Payment Date:</strong>
+                <span id="receiptDate"></span></p>
+
+            <p><strong>Student Name:</strong>
+                <span id="receiptStudent"></span></p>
+
+            <p><strong>Admission Number:</strong>
+                <span id="receiptAdmission"></span></p>
+
+            <p><strong>Class:</strong>
+                <span id="receiptClass"></span></p>
+
+            <p><strong>Term / Academic Year:</strong>
+                <span id="receiptTermYear"></span></p>
+
+            <p><strong>Payment Method:</strong>
+                <span id="receiptMethod"></span></p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount (KES)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>School fees payment</td>
+                    <td id="receiptAmount"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="receipt-total">
+            <p><strong>Total Fees Charged:</strong>
+                <span id="receiptFeesCharged">KES 0.00</span></p>
+
+            <p><strong>Total Paid for the Term:</strong>
+                <span id="receiptTotalPaid">KES 0.00</span></p>
+
+            <p><strong>Outstanding Balance:</strong>
+                <span id="receiptOutstandingBalance">KES 0.00</span></p>
+        </div>
+
+        <p class="receipt-thank-you">
+            Thank you for paying fees at St Peters Marakwet High School.
+            Please keep this receipt for your records.
+        </p>
+
+        <div class="receipt-signatures">
+            <div class="signature-box">
+                <p><strong>Received by:</strong></p>
+                <div class="signature-line"></div>
+                <small>Authorized signature</small>
+            </div>
+
+            <div class="signature-box">
+                <p><strong>Official stamp:</strong></p>
+                <div class="stamp-box"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="printableStatement"
+             class="printable-statement receipt">
+
+        <div class="receipt-heading">
+            <h2>ST PETERS MARAKWET HIGH SCHOOL</h2>
+            <h3>STUDENT FEE STATEMENT</h3>
+            <p>Finance Department</p>
+        </div>
+
+        <p><strong>Student:</strong>
+            <span id="statementStudent"></span></p>
+
+        <p><strong>Admission Number:</strong>
+            <span id="statementAdmission"></span></p>
+
+        <p><strong>Class:</strong>
+            <span id="statementClass"></span></p>
+
+        <p><strong>Term / Academic Year:</strong>
+            <span id="statementTerm"></span></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount (KES)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Total Fees Charged</td>
+                    <td id="statementCharged"></td>
+                </tr>
+
+                <tr>
+                    <td>Total Payments</td>
+                    <td id="statementPaid"></td>
+                </tr>
+
+                <tr>
+                    <td>Outstanding Balance</td>
+                    <td id="statementBalance"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Payment Receipts:</strong>
+            <span id="statementReceipts"></span></p>
+
+        <p><strong>Printed on:</strong>
+            <span id="statementDate"></span></p>
+
+        <div class="receipt-signatures">
+            <div class="signature-box">
+                <p>Prepared by:</p>
+                <div class="signature-line"></div>
+            </div>
+
+            <div class="signature-box">
+                <p>Authorized signature:</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    &copy; 2026 St Peters Marakwet High School. Finance Department.
+</footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   API CONFIGURATION
+===================================================== */
+
+const API_BASE = "http://localhost:5000";
+const STUDENTS_API = `${API_BASE}/students`;
+const FEES_API = `${API_BASE}/fees`;
+const PAYMENTS_API = `${API_BASE}/fee-payments`;
+
+let students = [];
+let feesRecords = [];
+let paymentReceiptRecords = [];
+
+const feesTableBody = document.getElementById("feesTableBody");
+const message = document.getElementById("message");
+
+const studentSelect = document.getElementById("student");
+const statementStudentSelect =
+    document.getElementById("statementStudentSelect");
+
+const statementTermSelect =
+    document.getElementById("statementTermSelect");
+
+const paymentReceiptSelect =
+    document.getElementById("paymentReceiptSelect");
+
+const paymentReceiptMessage =
+    document.getElementById("paymentReceiptMessage");
+
+
+/* =====================================================
+   GENERAL HELPERS
+===================================================== */
+
+function money(value) {
+    const number = Number(value ?? 0);
+
+    return "KES " + (Number.isFinite(number) ? number : 0)
+        .toLocaleString("en-KE", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+}
+
+function showMessage(text, success = false) {
+    message.textContent = text;
+    message.style.color = success ? "#167344" : "#b42318";
+}
+
+function unwrap(result) {
+    if (Array.isArray(result)) {
+        return result;
+    }
+
+    if (result && Array.isArray(result.data)) {
+        return result.data;
+    }
+
+    return [];
+}
+
+async function apiRequest(url) {
+    const response = await fetch(url);
+
+    let result;
+
+    try {
+        result = await response.json();
+    } catch {
+        throw new Error(
+            `Invalid server response. HTTP ${response.status}`
+        );
+    }
+
+    if (!response.ok || result.success === false) {
+        throw new Error(
+            result.message || `HTTP ${response.status}`
+        );
+    }
+
+    return result;
+}
+
+function getStudentName(record) {
+    return `${record.first_name || ""} ${record.last_name || ""}`
+        .trim() || "Unknown student";
+}
+
+function formatDate(value) {
+    if (!value) {
+        return "N/A";
+    }
+
+    const text = String(value);
+
+    const dateOnly = text.match(
+        /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+    if (dateOnly) {
+        return `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}`;
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return "N/A";
+    }
+
+    return date.toLocaleDateString("en-GB");
+}
+
+function localDateInputValue() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function setReceiptValue(id, value) {
+    const element = document.getElementById(id);
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        value === null || value === undefined || value === ""
+            ? "N/A"
+            : String(value);
+}
+
+
+/* =====================================================
+   LOAD STUDENTS
+===================================================== */
+
+async function loadStudents() {
+    try {
+        const result = await apiRequest(STUDENTS_API);
+
+        students = unwrap(result);
+
+        populateStudentDropdowns();
+
+    } catch (error) {
+        studentSelect.innerHTML =
+            '<option value="">Could not load students</option>';
+
+        statementStudentSelect.innerHTML =
+            '<option value="">Could not load students</option>';
+
+        showMessage(
+            "Could not load students: " + error.message
+        );
+    }
+}
+
+function populateStudentDropdowns() {
+    studentSelect.innerHTML =
+        '<option value="">Select student</option>';
+
+    statementStudentSelect.innerHTML =
+        '<option value="">Select student</option>';
+
+    students.forEach(student => {
+        const label =
+            `${student.admission_number || ""} - ` +
+            getStudentName(student);
+
+        const option1 = document.createElement("option");
+        option1.value = student.student_id;
+        option1.textContent = label;
+
+        const option2 = document.createElement("option");
+        option2.value = student.student_id;
+        option2.textContent = label;
+
+        studentSelect.appendChild(option1);
+        statementStudentSelect.appendChild(option2);
+    });
+
+    if (!students.length) {
+        studentSelect.innerHTML =
+            '<option value="">No students found</option>';
+
+        statementStudentSelect.innerHTML =
+            '<option value="">No students found</option>';
+    }
+}
+
+
+/* =====================================================
+   LOAD FEE ASSESSMENTS
+===================================================== */
+
+async function loadFees() {
+    feesTableBody.innerHTML =
+        '<tr><td colspan="8">Loading fee records...</td></tr>';
+
+    try {
+        const result = await apiRequest(FEES_API);
+
+        feesRecords = unwrap(result);
+displayFees();
+populateTerms();
+filterFeesRecords();
+
+        return true;
+
+    } catch (error) {
+        feesRecords = [];
+
+        feesTableBody.innerHTML =
+            '<tr><td colspan="8">Could not load fee records: ' +
+            escapeHTML(error.message) + '</td></tr>';
+
+        showMessage(
+            "Could not load fee records: " + error.message
+        );
+
+        return false;
+    }
+}
+
+
+/* Escape error text before inserting it into HTML. */
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+
+/* =====================================================
+   DISPLAY FEE TABLE AND SUMMARY
+===================================================== */
+
+function displayFees() {
+    feesTableBody.innerHTML = "";
+
+    // Keep summary totals based on ALL loaded fee records.
+    const totalCharged = feesRecords.reduce(
+        (sum, item) => sum + Number(item.fees_charged || 0), 0
+    );
+
+    const totalPaid = feesRecords.reduce(
+        (sum, item) => sum + Number(item.amount_paid || 0), 0
+    );
+
+    const totalBalance = feesRecords.reduce(
+        (sum, item) => sum + Math.max(
+            0,
+            Number(
+                item.balance ??
+                (Number(item.fees_charged || 0) -
+                 Number(item.amount_paid || 0))
+            )
+        ), 0
+    );
+
+    document.getElementById("totalCharged").textContent =
+        money(totalCharged);
+
+    document.getElementById("totalPaid").textContent =
+        money(totalPaid);
+
+    document.getElementById("totalBalance").textContent =
+        money(totalBalance);
+
+    // Read the selected filters.
+    const studentFilter =
+        document.getElementById("statementStudentSelect").value;
+
+    const termFilter =
+        document.getElementById("statementTermSelect").value;
+
+    // Filter records by student and term/year.
+    const filteredRecords = feesRecords.filter(record => {
+        const studentMatches =
+            !studentFilter ||
+            String(record.student_id) === String(studentFilter);
+
+        const recordTerm =
+            `${record.term || ""}|${record.academic_year || ""}`;
+
+        const termMatches =
+            !termFilter || recordTerm === termFilter;
+
+        return studentMatches && termMatches;
+    });
+
+    // Show a message when no records match.
+    if (filteredRecords.length === 0) {
+        feesTableBody.innerHTML =
+            '<tr><td colspan="8">No fee records match your selected filters.</td></tr>';
+        return;
+    }
+
+    // Display only matching records.
+    filteredRecords.forEach(record => {
+        const row = document.createElement("tr");
+
+        const charged = Number(record.fees_charged || 0);
+        const paid = Number(record.amount_paid || 0);
+
+        const balance = Math.max(
+            0,
+            Number(record.balance ?? (charged - paid))
+        );
+
+        let status = "Unpaid";
+        let statusClass = "unpaid";
+
+        if (balance <= 0.005) {
+            status = "Paid";
+            statusClass = "paid";
+        } else if (paid > 0) {
+            status = "Partial";
+            statusClass = "partial";
+        }
+
+        const values = [
+            getStudentName(record),
+            record.admission_number || "—",
+            `${record.term || "—"} / ${record.academic_year || "—"}`,
+            money(charged),
+            money(paid),
+            money(balance)
+        ];
+
+        values.forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+
+        badge.className = `status ${statusClass}`;
+        badge.textContent = status;
+
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        const receiptCell = document.createElement("td");
+        receiptCell.textContent = record.receipt_numbers || "—";
+        row.appendChild(receiptCell);
+
+        feesTableBody.appendChild(row);
+    });
+}
+
+/* =====================================================
+   POPULATE TERM AND YEAR FILTER
+===================================================== */
+
+function filterFeesRecords() {
+    const selectedStudentId = statementStudentSelect.value;
+    const selectedTermKey = statementTermSelect.value;
+
+statementStudentSelect.addEventListener("change", displayFees);
+statementTermSelect.addEventListener("change", displayFees);
+
+    const filteredRecords = feesRecords.filter(record => {
+        const studentMatches =
+            !selectedStudentId ||
+            String(record.student_id) === String(selectedStudentId);
+
+        const recordTermKey =
+            `${record.term}|${record.academic_year}`;
+
+        const termMatches =
+            !selectedTermKey ||
+            recordTermKey === selectedTermKey;
+
+        return studentMatches && termMatches;
+    });
+
+    // Show only the records matching the selected filters.
+    feesTableBody.innerHTML = "";
+
+    if (filteredRecords.length === 0) {
+        feesTableBody.innerHTML =
+            '<tr><td colspan="8">No fee records match your selection.</td></tr>';
+        return;
+    }
+
+    filteredRecords.forEach(record => {
+        const charged = Number(record.fees_charged || 0);
+        const paid = Number(record.amount_paid || 0);
+        const balance = Math.max(
+            0,
+            Number(record.balance ?? (charged - paid))
+        );
+
+        let status = "Unpaid";
+        let statusClass = "unpaid";
+
+        if (balance <= 0) {
+            status = "Paid";
+            statusClass = "paid";
+        } else if (paid > 0) {
+            status = "Partial";
+            statusClass = "partial";
+        }
+
+        const row = document.createElement("tr");
+
+        [
+            getStudentName(record),
+            record.admission_number || "—",
+            `${record.term || "—"} / ${record.academic_year || "—"}`,
+            money(charged),
+            money(paid),
+            money(balance)
+        ].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = `status ${statusClass}`;
+        badge.textContent = status;
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        const receiptCell = document.createElement("td");
+        receiptCell.textContent = record.receipt_numbers || "—";
+        row.appendChild(receiptCell);
+
+        feesTableBody.appendChild(row);
+    });
+}
+
+function populateTerms() {
+    const oldValue = statementTermSelect.value;
+
+    statementTermSelect.innerHTML =
+        '<option value="">Select a term and year</option>';
+
+    const terms = new Map();
+
+    feesRecords.forEach(record => {
+        if (!record.term || !record.academic_year) {
+            return;
+        }
+
+        const key = `${record.term}|${record.academic_year}`;
+
+        if (!terms.has(key)) {
+            terms.set(key, {
+                term: record.term,
+                year: record.academic_year
+            });
+        }
+    });
+
+    terms.forEach((item, key) => {
+        const option = document.createElement("option");
+
+        option.value = key;
+        option.textContent = `${item.term} / ${item.year}`;
+
+        statementTermSelect.appendChild(option);
+    });
+
+    if ([...statementTermSelect.options].some(
+        option => option.value === oldValue
+    )) {
+        statementTermSelect.value = oldValue;
+    }
+}
+
+
+/* =====================================================
+   UPDATE OUTSTANDING BALANCE PREVIEW
+===================================================== */
+
+function updateBalancePreview() {
+    const fees = Number(
+        document.getElementById("feesCharged").value || 0
+    );
+
+    const paid = Number(
+        document.getElementById("amountPaid").value || 0
+    );
+
+    const balance = Math.max(0, fees - paid);
+
+    document.getElementById("balancePreview").textContent =
+        money(balance);
+}
+
+document.getElementById("feesCharged")
+    .addEventListener("input", updateBalancePreview);
+
+document.getElementById("amountPaid")
+    .addEventListener("input", updateBalancePreview);
+
+
+/* =====================================================
+   RECORD FEES FORM
+
+   The supplied API information confirms GET endpoints only.
+   Do not submit financial data until the correct POST route
+   and its required fields have been verified in server.js.
+===================================================== */
+
+document.getElementById("feesForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const form = this;
+    const saveButton = document.getElementById("saveFeesButton");
+
+    const studentId = document.getElementById("student").value;
+    const term = document.getElementById("term").value;
+    const academicYear = Number(document.getElementById("year").value);
+    const feesCharged = Number(document.getElementById("feesCharged").value);
+    const amountPaid = Number(document.getElementById("amountPaid").value);
+    const paymentDate = document.getElementById("paymentDate").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const receiptNumber = document.getElementById("receiptNumberInput").value.trim();
+
+    // Validate the required fee information.
+    if (!studentId || !term || !academicYear ||
+        !Number.isFinite(feesCharged) || feesCharged <= 0 ||
+        !Number.isFinite(amountPaid) || amountPaid < 0) {
+        showMessage("Please enter valid student and fee details.");
+        return;
+    }
+
+    // Payment details are required only when money is being paid.
+    if (amountPaid > 0 && (!paymentDate || !paymentMethod)) {
+        showMessage("Enter the payment date and payment method.");
+        return;
+    }
+
+    const payload = {
+        student_id: Number(studentId),
+        term: term,
+        academic_year: academicYear,
+        fees_charged: feesCharged,
+        amount_paid: amountPaid,
+        payment_date: paymentDate,
+        payment_method: paymentMethod,
+        receipt_number: receiptNumber
+    };
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+        const response = await fetch("http://localhost:5000/fees/record", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Unable to save fees.");
+        }
+
+        showMessage(result.message || "Fees saved successfully.");
+
+        // Refresh the displayed records after saving.
+        setTimeout(() => {
+            window.location.reload();
+        }, 1200);
+
+    } catch (error) {
+        console.error("Error saving student fees:", error);
+        showMessage(
+            error.message ||
+            "Unable to save fees. Check that the backend is running."
+        );
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Record Fees";
+    }
+});
+
+
+document.getElementById("feesForm")
+    .addEventListener("reset", function() {
+        setTimeout(() => {
+            document.getElementById("year").value =
+                new Date().getFullYear();
+
+            document.getElementById("paymentDate").value =
+                localDateInputValue();
+
+            document.getElementById("amountPaid").value = "0";
+
+            updateBalancePreview();
+            showMessage("");
+        }, 0);
+    });
+
+
+/* =====================================================
+   PRINT STUDENT FEE STATEMENT
+===================================================== */
+
+function printFeeStatement() {
+    const studentId = statementStudentSelect.value;
+    const termKey = statementTermSelect.value;
+
+    if (!studentId) {
+        alert("Please select a student.");
+        return;
+    }
+
+    if (!termKey) {
+        alert("Please select a term and academic year.");
+        return;
+    }
+
+    const [term, year] = termKey.split("|");
+
+    const student = students.find(
+        item => String(item.student_id) === String(studentId)
+    );
+
+    const records = feesRecords.filter(record =>
+        String(record.student_id) === String(studentId) &&
+        String(record.term) === term &&
+        String(record.academic_year) === year
+    );
+
+    if (!student || !records.length) {
+        alert(
+            "No fee assessment was found for the selected " +
+            "student and term."
+        );
+        return;
+    }
+
+    const charged = records.reduce(
+        (sum, item) =>
+            sum + Number(item.fees_charged || 0), 0
+    );
+
+    const paid = records.reduce(
+        (sum, item) =>
+            sum + Number(item.amount_paid || 0), 0
+    );
+
+    const balance = records.reduce(
+        (sum, item) =>
+            sum + Math.max(
+                0,
+                Number(
+                    item.balance ??
+                    (Number(item.fees_charged || 0) -
+                     Number(item.amount_paid || 0))
+                )
+            ), 0
+    );
+
+    const receiptNumbers = records
+        .flatMap(item =>
+            String(item.receipt_numbers || "").split(",")
+        )
+        .map(value => value.trim())
+        .filter(value =>
+            value && value.toUpperCase() !== "N/A"
+        );
+
+    setReceiptValue(
+        "statementStudent",
+        getStudentName(student).toUpperCase()
+    );
+
+    setReceiptValue(
+        "statementAdmission",
+        student.admission_number || records[0].admission_number
+    );
+
+    setReceiptValue(
+        "statementClass",
+        student.class_name || records[0].class_name || "—"
+    );
+
+    setReceiptValue(
+        "statementTerm",
+        `${term} / ${year}`
+    );
+
+    setReceiptValue("statementCharged", money(charged));
+    setReceiptValue("statementPaid", money(paid));
+    setReceiptValue("statementBalance", money(balance));
+
+    setReceiptValue(
+        "statementReceipts",
+        [...new Set(receiptNumbers)].join(", ") ||
+        "No receipts recorded"
+    );
+
+    setReceiptValue(
+        "statementDate",
+        new Date().toLocaleDateString("en-GB")
+    );
+
+    printWithClass("printing-statement");
+}
+
+
+/* =====================================================
+   LOAD INDIVIDUAL PAYMENT RECEIPTS
+===================================================== */
+
+async function loadPaymentReceipts() {
+    const previousValue = paymentReceiptSelect.value;
+
+    paymentReceiptSelect.innerHTML =
+        '<option value="">Loading payment receipts...</option>';
+
+    paymentReceiptMessage.textContent = "";
+
+    try {
+        const result = await apiRequest(PAYMENTS_API);
+
+        paymentReceiptRecords = unwrap(result);
+
+        paymentReceiptSelect.innerHTML =
+            '<option value="">Select a payment receipt</option>';
+
+        paymentReceiptRecords.forEach(payment => {
+            const option = document.createElement("option");
+
+            option.value = payment.payment_id;
+
+            const receiptNumber =
+                payment.receipt_number &&
+                payment.receipt_number !== "N/A"
+                    ? payment.receipt_number
+                    : "No receipt number";
+
+            option.textContent =
+                `${receiptNumber} — ${getStudentName(payment)} — ` +
+                `${money(payment.amount_paid)} — ` +
+                `${formatDate(payment.payment_date)}`;
+
+            paymentReceiptSelect.appendChild(option);
+        });
+
+        if (!paymentReceiptRecords.length) {
+            paymentReceiptSelect.innerHTML =
+                '<option value="">No payment records found</option>';
+        } else if (
+            [...paymentReceiptSelect.options].some(
+                option => option.value === previousValue
+            )
+        ) {
+            paymentReceiptSelect.value = previousValue;
+        }
+
+        paymentReceiptMessage.textContent =
+            `Loaded ${paymentReceiptRecords.length} payment record(s).`;
+
+        paymentReceiptMessage.style.color = "#167344";
+
+    } catch (error) {
+        paymentReceiptSelect.innerHTML =
+            '<option value="">Could not load receipts</option>';
+
+        paymentReceiptMessage.textContent =
+            "Could not load payment receipts: " + error.message;
+
+        paymentReceiptMessage.style.color = "#b42318";
+    }
+}
+
+
+/* =====================================================
+   PRINT ONE SELECTED PAYMENT RECEIPT
+===================================================== */
+
+function printSelectedPaymentReceipt() {
+    const paymentId = paymentReceiptSelect.value;
+
+    if (!paymentId) {
+        alert("Please select a payment receipt.");
+        return;
+    }
+
+    const payment = paymentReceiptRecords.find(
+        item => String(item.payment_id) === String(paymentId)
+    );
+
+    if (!payment) {
+        alert(
+            "Payment not found. Refresh the payment receipts " +
+            "and try again."
+        );
+        return;
+    }
+
+    const assessment = feesRecords.find(
+        item =>
+            String(item.assessment_id) ===
+            String(payment.assessment_id)
+    );
+
+    if (!assessment) {
+        alert(
+            "The fee assessment details are not loaded. " +
+            "Refresh the fee records and try again."
+        );
+        return;
+    }
+
+    const charged = Number(assessment.fees_charged || 0);
+    const totalPaid = Number(assessment.amount_paid || 0);
+
+    const balance = Math.max(
+        0,
+        Number(assessment.balance ?? (charged - totalPaid))
+    );
+
+    setReceiptValue(
+        "receiptNumber",
+        payment.receipt_number || "N/A"
+    );
+
+    setReceiptValue(
+        "receiptDate",
+        formatDate(payment.payment_date)
+    );
+
+    setReceiptValue(
+        "receiptStudent",
+        getStudentName(payment)
+    );
+
+    setReceiptValue(
+        "receiptAdmission",
+        payment.admission_number
+    );
+
+    setReceiptValue(
+        "receiptClass",
+        payment.class_name || assessment.class_name
+    );
+
+    setReceiptValue(
+        "receiptTermYear",
+        `${payment.term || assessment.term || "N/A"} / ` +
+        `${payment.academic_year || assessment.academic_year || "N/A"}`
+    );
+
+    setReceiptValue(
+        "receiptMethod",
+        payment.payment_method
+    );
+
+    setReceiptValue(
+        "receiptAmount",
+        money(payment.amount_paid)
+    );
+
+    setReceiptValue(
+        "receiptFeesCharged",
+        money(charged)
+    );
+
+    setReceiptValue(
+        "receiptTotalPaid",
+        money(totalPaid)
+    );
+
+    setReceiptValue(
+        "receiptOutstandingBalance",
+        money(balance)
+    );
+
+    printWithClass("printing-receipt");
+}
+
+
+/* =====================================================
+   PRINT ALL FEE RECORDS
+===================================================== */
+
+function printAllFees() {
+    if (!feesRecords.length) {
+        alert("There are no fee records to print.");
+        return;
+    }
+
+    printWithClass("printing-all-fees");
+}
+
+
+/* =====================================================
+   SHARED PRINT FUNCTION
+
+   CSS class names match the @media print selectors.
+===================================================== */
+
+let printCleanupHandler = null;
+
+function printWithClass(className) {
+    const printClasses = [
+        "printing-receipt",
+        "printing-statement",
+        "printing-all-fees"
+    ];
+
+    // Remove any previous print handler.
+    if (printCleanupHandler) {
+        window.removeEventListener(
+            "afterprint",
+            printCleanupHandler
+        );
+        printCleanupHandler = null;
+    }
+
+    // Clear old printing classes.
+    document.body.classList.remove(...printClasses);
+
+    // Add the class for the item being printed.
+    document.body.classList.add(className);
+
+    // Restore the normal page after printing.
+    const cleanup = function () {
+        document.body.classList.remove(...printClasses);
+
+        window.removeEventListener(
+            "afterprint",
+            cleanup
+        );
+
+        if (printCleanupHandler === cleanup) {
+            printCleanupHandler = null;
+        }
+    };
+
+    printCleanupHandler = cleanup;
+
+    window.addEventListener("afterprint", cleanup);
+
+    // Start printing.
+    window.print();
+
+    // Fallback: restore the page when the print dialog closes.
+    cleanup();
+}
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+document.getElementById("printStatementButton")
+    .addEventListener("click", printFeeStatement);
+
+document.getElementById("printPaymentReceiptButton")
+    .addEventListener("click", printSelectedPaymentReceipt);
+
+document.getElementById("refreshFeesButton")
+    .addEventListener("click", async function() {
+        const success = await loadFees();
+
+        if (success) {
+            showMessage("Fee records refreshed successfully.", true);
+        }
+    });
+
+document.getElementById("refreshPaymentReceiptsButton")
+    .addEventListener("click", loadPaymentReceipts);
+
+document.getElementById("printAllFeesButton")
+    .addEventListener("click", printAllFees);
+
+
+/* =====================================================
+   INITIALIZE PAGE
+===================================================== */
+statementStudentSelect.addEventListener(
+    "change",
+    filterFeesRecords
+);
+
+statementTermSelect.addEventListener(
+    "change",
+    filterFeesRecords
+);
+async function initializePage() {
+    document.getElementById("year").value =
+        new Date().getFullYear();
+
+    document.getElementById("paymentDate").value =
+        localDateInputValue();
+
+    updateBalancePreview();
+
+    await Promise.all([
+        loadStudents(),
+        loadFees(),
+        loadPaymentReceipts()
+    ]);
+}
+
+initializePage();
+
+</script>
+</body>
+</html>

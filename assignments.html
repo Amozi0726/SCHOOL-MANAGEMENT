@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Assignments | School Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 22px 35px;
+        }
+
+        header h1 {
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbe7f5;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #17365d;
+        }
+
+        .description {
+            color: #68778a;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            background: white;
+        }
+
+        button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .primary-btn {
+            margin-top: 22px;
+            background: #1769aa;
+        }
+
+        .primary-btn:hover {
+            background: #124f82;
+        }
+
+        .refresh-btn {
+            background: #1769aa;
+        }
+
+        .delete-btn {
+            background: #c0392b;
+            padding: 8px 12px;
+        }
+
+        .delete-btn:hover {
+            background: #922b21;
+        }
+
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .table-heading h2 {
+            margin: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        th {
+            background: #edf3f9;
+            color: #17365d;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 0 0 30px;
+            color: #1769aa;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Management System</h1>
+        <p>Academic Administration</p>
+    </header>
+
+    <main>
+        <!-- Assignment form -->
+        <section class="card">
+            <h2>Assign Subjects to Teachers</h2>
+            <p class="description">
+                Select a teacher, subject, and class to create an assignment.
+            </p>
+
+            <form id="assignmentForm">
+                <label for="teacher">Select Teacher</label>
+                <select id="teacher" name="teacher_id" required>
+                    <option value="">Loading teachers...</option>
+                </select>
+
+                <label for="subject">Select Subject</label>
+                <select id="subject" name="subject_id" required>
+                    <option value="">Loading subjects...</option>
+                </select>
+
+                <label for="schoolClass">Select Class</label>
+                <select id="schoolClass" name="class_id" required>
+                    <option value="">Loading classes...</option>
+                </select>
+
+                <button type="submit" class="primary-btn" id="saveBtn">
+                    Save Assignment
+                </button>
+            </form>
+
+            <p id="formMessage" class="status" role="status"></p>
+        </section>
+
+        <!-- Saved assignments table -->
+        <section class="card">
+            <div class="table-heading">
+                <h2>Assigned Subjects</h2>
+                <button type="button" class="refresh-btn" id="refreshBtn">
+                    Refresh List
+                </button>
+            </div>
+
+            <p class="description">
+                View and manage teacher, subject, and class assignments.
+            </p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Teacher</th>
+                            <th>Subject</th>
+                            <th>Class</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="assignmentsBody">
+                        <tr>
+                            <td colspan="5">Loading assignments...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="tableMessage" class="status" role="status"></p>
+        </section>
+
+        <a class="back-link" href="dashboard.html">
+            &larr; Back to Dashboard
+        </a>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const teacherSelect = document.getElementById("teacher");
+        const subjectSelect = document.getElementById("subject");
+        const classSelect = document.getElementById("schoolClass");
+
+        const form = document.getElementById("assignmentForm");
+        const saveBtn = document.getElementById("saveBtn");
+        const refreshBtn = document.getElementById("refreshBtn");
+
+        const formMessage = document.getElementById("formMessage");
+        const tableMessage = document.getElementById("tableMessage");
+        const assignmentsBody = document.getElementById("assignmentsBody");
+
+        function showMessage(element, message, isError = false) {
+            element.textContent = message;
+            element.style.color = isError ? "#c0392b" : "#218838";
+        }
+
+        async function fetchJSON(url, options = {}) {
+            const response = await fetch(url, options);
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || `Request failed (${response.status}).`
+                );
+            }
+
+            return result;
+        }
+
+        function fillDropdown(select, items, placeholder, idField) {
+            select.innerHTML = "";
+
+            const firstOption = document.createElement("option");
+            firstOption.value = "";
+            firstOption.textContent = placeholder;
+            select.appendChild(firstOption);
+
+            items.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item[idField];
+                option.textContent = item.name;
+                select.appendChild(option);
+            });
+        }
+
+        async function loadAssignmentOptions() {
+            try {
+                const result = await fetchJSON(
+                    `${API_URL}/assignment-options`
+                );
+
+                fillDropdown(
+                    teacherSelect,
+                    result.data.teachers,
+                    "Choose a teacher",
+                    "teacher_id"
+                );
+
+                fillDropdown(
+                    subjectSelect,
+                    result.data.subjects,
+                    "Choose a subject",
+                    "subject_id"
+                );
+
+                fillDropdown(
+                    classSelect,
+                    result.data.classes,
+                    "Choose a class",
+                    "class_id"
+                );
+
+                showMessage(
+                    formMessage,
+                    "Assignment options loaded successfully."
+                );
+
+            } catch (error) {
+                showMessage(
+                    formMessage,
+                    "Could not load options: " + error.message,
+                    true
+                );
+            }
+        }
+
+        async function loadAssignments() {
+            refreshBtn.disabled = true;
+            assignmentsBody.innerHTML = "";
+
+            const loadingRow = document.createElement("tr");
+            const loadingCell = document.createElement("td");
+            loadingCell.colSpan = 5;
+            loadingCell.textContent = "Loading assignments...";
+            loadingRow.appendChild(loadingCell);
+            assignmentsBody.appendChild(loadingRow);
+
+            try {
+                const result = await fetchJSON(`${API_URL}/assignments`);
+                const assignments = result.data || [];
+
+                assignmentsBody.innerHTML = "";
+
+                if (assignments.length === 0) {
+                    const row = document.createElement("tr");
+                    const cell = document.createElement("td");
+
+                    cell.colSpan = 5;
+                    cell.textContent = "No assignments have been created yet.";
+
+                    row.appendChild(cell);
+                    assignmentsBody.appendChild(row);
+
+                    showMessage(tableMessage, "No saved assignments.");
+                    return;
+                }
+
+                assignments.forEach(assignment => {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        assignment.assignment_id,
+                        assignment.teacher_name,
+                        assignment.subject_name,
+                        assignment.class_name
+                    ];
+
+                    values.forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value ?? "";
+                        row.appendChild(cell);
+                    });
+
+                    const actionCell = document.createElement("td");
+                    const deleteButton = document.createElement("button");
+
+                    deleteButton.type = "button";
+                    deleteButton.textContent = "Delete";
+                    deleteButton.className = "delete-btn";
+
+                    deleteButton.addEventListener("click", () => {
+                        deleteAssignment(
+                            assignment.assignment_id,
+                            assignment.teacher_name,
+                            assignment.subject_name,
+                            assignment.class_name,
+                            deleteButton
+                        );
+                    });
+
+                    actionCell.appendChild(deleteButton);
+                    row.appendChild(actionCell);
+
+                    assignmentsBody.appendChild(row);
+                });
+
+                showMessage(
+                    tableMessage,
+                    `${assignments.length} assignment(s) loaded.`
+                );
+
+            } catch (error) {
+                assignmentsBody.innerHTML = "";
+
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+
+                cell.colSpan = 5;
+                cell.textContent = "Could not load assignments. " + error.message;
+
+                row.appendChild(cell);
+                assignmentsBody.appendChild(row);
+
+                showMessage(
+                    tableMessage,
+                    "Check that your backend is running.",
+                    true
+                );
+
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        }
+
+        async function deleteAssignment(
+            id, teacher, subject, schoolClass, button
+        ) {
+            const confirmed = window.confirm(
+                `Delete assignment #${id}?\n\n` +
+                `${teacher} — ${subject} — ${schoolClass}`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            button.disabled = true;
+
+            try {
+                const result = await fetchJSON(
+                    `${API_URL}/assignments/${id}`,
+                    { method: "DELETE" }
+                );
+
+                showMessage(tableMessage, result.message);
+                await loadAssignments();
+
+            } catch (error) {
+                showMessage(
+                    tableMessage,
+                    "Could not delete assignment: " + error.message,
+                    true
+                );
+
+                button.disabled = false;
+            }
+        }
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            saveBtn.disabled = true;
+            showMessage(formMessage, "Saving assignment...");
+
+            const assignment = {
+                teacher_id: Number(teacherSelect.value),
+                subject_id: Number(subjectSelect.value),
+                class_id: Number(classSelect.value)
+            };
+
+            try {
+                const result = await fetchJSON(`${API_URL}/assignments`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(assignment)
+                });
+
+                showMessage(
+                    formMessage,
+                    result.message || "Assignment saved successfully."
+                );
+
+                form.reset();
+
+                await loadAssignments();
+
+            } catch (error) {
+                showMessage(
+                    formMessage,
+                    "Could not save assignment: " + error.message,
+                    true
+                );
+
+            } finally {
+                saveBtn.disabled = false;
+            }
+        });
+
+        refreshBtn.addEventListener("click", loadAssignments);
+
+        async function initializePage() {
+            await loadAssignmentOptions();
+            await loadAssignments();
+        }
+
+        initializePage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Term Report Card | St Peters Marakwet High School</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 24px 5%;
+        }
+
+        header h1 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #dce7f5;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            margin-bottom: 22px;
+        }
+
+        .intro h2 {
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel h3 {
+            color: #17365d;
+            margin-bottom: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #17365d;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #243247;
+        }
+
+        #message {
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .report-card {
+            background: white;
+            padding: 32px;
+            border: 1px solid #dbe3ee;
+        }
+
+        .school-heading {
+            text-align: center;
+            border-bottom: 3px double #17365d;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+
+        .school-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .school-heading h2 {
+            color: #17365d;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .school-heading p {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .school-heading h3 {
+            margin-top: 14px;
+            font-size: 18px;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .detail {
+            padding: 13px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+        }
+
+        .detail span {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .detail strong {
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            border: 1px solid #dbe3ee;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #edf2f7;
+            color: #17365d;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .summary-box {
+            border: 1px solid #dbe3ee;
+            border-radius: 6px;
+            padding: 17px;
+            text-align: center;
+        }
+
+        .summary-box p {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .summary-box h3 {
+            color: #17365d;
+            font-size: 21px;
+        }
+
+        .comments {
+            padding: 18px;
+            border: 1px solid #dbe3ee;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        .comments h3 {
+            color: #17365d;
+            margin-bottom: 12px;
+        }
+
+        .comments p {
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .signatures {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 40px;
+            margin-top: 35px;
+        }
+
+        .signature {
+            border-top: 1px solid #64748b;
+            padding-top: 10px;
+            font-size: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 28px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid,
+            .student-details,
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-card {
+                padding: 18px;
+            }
+
+            .school-heading h2 {
+                font-size: 20px;
+            }
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            header,
+            .intro,
+            .selection-panel,
+            .no-print {
+                display: none !important;
+            }
+
+            main {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .report-card {
+                padding: 0;
+                border: none;
+            }
+
+            .detail,
+            .summary-box {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            th {
+                background: #edf2f7 !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            th, td {
+                padding: 8px 6px;
+                font-size: 10px;
+            }
+
+            table,
+            .student-details,
+            .summary-grid,
+            .comments,
+            .signatures {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>ST PETERS MARAKWET HIGH SCHOOL</h1>
+        <p>Student Academic Reports</p>
+    </header>
+
+    <main>
+        <div class="intro">
+            <h2>Multi-Subject Student Report Card</h2>
+            <p>
+                Generate one report card showing a student's recorded
+                subject results for a selected term and academic year.
+            </p>
+        </div>
+
+        <section class="panel selection-panel">
+            <h3>Select Report Details</h3>
+
+            <div class="form-grid">
+                <div>
+                    <label for="studentSelect">Student</label>
+                    <select id="studentSelect">
+                        <option value="">Loading students...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="termSelect">Term</label>
+                    <select id="termSelect">
+                        <option value="">Loading terms...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="yearSelect">Academic Year</label>
+                    <select id="yearSelect">
+                        <option value="">Loading years...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="primary-btn" id="generateBtn">
+                    Generate Report Card
+                </button>
+
+                <button type="button" class="secondary-btn" id="printBtn">
+                    Print / Save PDF
+                </button>
+            </div>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section id="reportCard" class="report-card hidden">
+            <div class="school-heading">
+                <img
+                    src="school-logo.jpg"
+                    alt="School Logo"
+                    class="school-logo"
+                    onerror="this.style.display='none'"
+                >
+
+                <h2>ST PETERS MARAKWET HIGH SCHOOL</h2>
+                <p>Student Academic Performance Report</p>
+                <h3>TERM REPORT CARD</h3>
+            </div>
+
+            <div class="student-details">
+                <div class="detail">
+                    <span>Student Name</span>
+                    <strong id="studentName">-</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Admission Number</span>
+                    <strong id="admissionNumber">-</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Class</span>
+                    <strong id="studentClass">-</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Term</span>
+                    <strong id="reportTerm">-</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Academic Year</span>
+                    <strong id="reportYear">-</strong>
+                </div>
+
+                <div class="detail">
+                    <span>Subjects with Results</span>
+                    <strong id="subjectCount">0</strong>
+                </div>
+            </div>
+
+            <h3 style="color:#17365d; margin-bottom:14px;">
+                Subject Performance
+            </h3>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Subject</th>
+                            <th>Examination</th>
+                            <th>Marks Obtained</th>
+                            <th>Maximum Marks</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="resultsBody"></tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">TOTAL</th>
+                            <th id="totalMarks">0.00</th>
+                            <th id="totalMaximum">0.00</th>
+                            <th id="overallPercentage">-</th>
+                            <th>-</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <p>Subjects with Results</p>
+                    <h3 id="summarySubjects">0</h3>
+                </div>
+
+                <div class="summary-box">
+                    <p>Overall Percentage</p>
+                    <h3 id="summaryPercentage">-</h3>
+                </div>
+
+                <div class="summary-box">
+                    <p>Recorded Grades</p>
+                    <h3 id="summaryGrades">0</h3>
+                </div>
+            </div>
+
+            <div class="comments">
+                <h3>Teacher's Comments</h3>
+                <p id="teacherComments">No comments recorded.</p>
+            </div>
+
+            <div class="signatures">
+                <div class="signature">
+                    Class Teacher's Signature: ______________________
+                </div>
+
+                <div class="signature">
+                    Principal's Signature: ___________________________
+                </div>
+            </div>
+
+            <div class="footer">
+                St Peters Marakwet High School — Official Student Report Card
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const studentSelect = document.getElementById("studentSelect");
+        const termSelect = document.getElementById("termSelect");
+        const yearSelect = document.getElementById("yearSelect");
+        const message = document.getElementById("message");
+        const reportCard = document.getElementById("reportCard");
+        const resultsBody = document.getElementById("resultsBody");
+
+        let students = [];
+        let examinations = [];
+        let reportGenerated = false;
+
+        function showMessage(text, success = false) {
+            message.textContent = text;
+            message.style.color = success ? "#15803d" : "#dc2626";
+        }
+
+        function setText(id, value) {
+            document.getElementById(id).textContent = value ?? "-";
+        }
+
+        async function getApiData(url) {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!response.ok || data.success === false) {
+                throw new Error(
+                    data.message || "Unable to retrieve information from the server."
+                );
+            }
+
+            const records = Array.isArray(data) ? data : data.data;
+
+            if (!Array.isArray(records)) {
+                throw new Error("The server returned an unexpected data format.");
+            }
+
+            return records;
+        }
+
+        function resetReport() {
+            reportGenerated = false;
+            reportCard.classList.add("hidden");
+        }
+
+        function populateDropdown(select, values, placeholder) {
+            select.replaceChildren(new Option(placeholder, ""));
+
+            values.forEach(value => {
+                select.add(new Option(value, value));
+            });
+        }
+
+        async function loadData() {
+            try {
+                const data = await Promise.all([
+                    getApiData(`${API_URL}/students`),
+                    getApiData(`${API_URL}/examinations`)
+                ]);
+
+                students = data[0];
+                examinations = data[1];
+
+                studentSelect.replaceChildren(
+                    new Option("Select student", "")
+                );
+
+                students.forEach(student => {
+                    studentSelect.add(
+                        new Option(
+                            `${student.first_name} ${student.last_name} ` +
+                            `(${student.admission_number})`,
+                            student.student_id
+                        )
+                    );
+                });
+
+                const terms = [...new Set(
+                    examinations
+                        .map(exam => exam.term)
+                        .filter(Boolean)
+                )];
+
+                const years = [...new Set(
+                    examinations
+                        .map(exam => String(exam.academic_year || ""))
+                        .filter(Boolean)
+                )].sort((a, b) => Number(b) - Number(a));
+
+                populateDropdown(termSelect, terms, "Select term");
+                populateDropdown(yearSelect, years, "Select academic year");
+
+                if (students.length === 0) {
+                    showMessage("No students were found in the database.");
+                    return;
+                }
+
+                if (examinations.length === 0) {
+                    showMessage("No examinations have been created yet.");
+                    return;
+                }
+
+                // Convenient defaults: select the term/year from the latest
+                // examination date where available.
+                const datedExams = examinations
+                    .filter(exam => exam.exam_date)
+                    .sort((a, b) =>
+                        new Date(b.exam_date) - new Date(a.exam_date)
+                    );
+
+                const latestExam = datedExams[0] || examinations[examinations.length - 1];
+
+                if (latestExam.term) {
+                    termSelect.value = latestExam.term;
+                }
+
+                if (latestExam.academic_year) {
+                    yearSelect.value = String(latestExam.academic_year);
+                }
+
+                showMessage("Students and examinations loaded successfully.", true);
+            } catch (error) {
+                showMessage(
+                    "Could not load data. Ensure your backend is running. " +
+                    error.message
+                );
+            }
+        }
+
+        async function generateReport() {
+            resetReport();
+
+            const studentId = studentSelect.value;
+            const term = termSelect.value;
+            const year = yearSelect.value;
+
+            if (!studentId || !term || !year) {
+                showMessage("Please select a student, term, and academic year.");
+                return;
+            }
+
+            const student = students.find(
+                item => String(item.student_id) === String(studentId)
+            );
+
+            if (!student) {
+                showMessage("The selected student could not be found.");
+                return;
+            }
+
+            const matchingExams = examinations.filter(exam =>
+                String(exam.term) === String(term) &&
+                String(exam.academic_year) === String(year) &&
+                String(exam.class_name || "").trim().toUpperCase() ===
+                    String(student.class_name || "").trim().toUpperCase()
+            );
+
+            if (matchingExams.length === 0) {
+                showMessage(
+                    "No examinations were found for this student's class, term, and year."
+                );
+                return;
+            }
+
+            showMessage("Loading all saved subject results...");
+
+            try {
+                const groups = await Promise.all(
+                    matchingExams.map(async exam => {
+                        const results = await getApiData(
+                            `${API_URL}/exam-results?exam_id=` +
+                            encodeURIComponent(exam.exam_id)
+                        );
+
+                        return results
+                            .filter(result =>
+                                String(result.student_id) ===
+                                String(student.student_id)
+                            )
+                            .map(result => ({ exam, result }));
+                    })
+                );
+
+                const savedResults = groups.flat();
+
+                if (savedResults.length === 0) {
+                    showMessage(
+                        "No results have been saved for this student in the selected term and year."
+                    );
+                    return;
+                }
+
+                let totalMarks = 0;
+                let totalMaximum = 0;
+                let gradeCount = 0;
+                const comments = [];
+
+                resultsBody.replaceChildren();
+
+                savedResults.forEach((item, index) => {
+                    const exam = item.exam;
+                    const result = item.result;
+                    const marks = Number(result.marks_obtained);
+                    const maximum = Number(exam.max_marks);
+
+                    if (
+                        !Number.isFinite(marks) ||
+                        !Number.isFinite(maximum) ||
+                        marks < 0 ||
+                        maximum <= 0 ||
+                        marks > maximum
+                    ) {
+                        throw new Error(
+                            `Invalid marks found for ${exam.exam_name}. Please check the saved result.`
+                        );
+                    }
+
+                    const percentage = marks / maximum * 100;
+
+                    totalMarks += marks;
+                    totalMaximum += maximum;
+
+                    if (result.grade) {
+                        gradeCount++;
+                    }
+
+                    if (result.remarks && String(result.remarks).trim()) {
+                        comments.push(
+                            `${exam.subject_name || "Subject"}: ${result.remarks}`
+                        );
+                    }
+
+                    const row = document.createElement("tr");
+
+                    [
+                        index + 1,
+                        exam.subject_name || "-",
+                        exam.exam_name || "-",
+                        marks.toFixed(2),
+                        maximum.toFixed(2),
+                        `${percentage.toFixed(2)}%`,
+                        result.grade || "-"
+                    ].forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value;
+                        row.appendChild(cell);
+                    });
+
+                    resultsBody.appendChild(row);
+                });
+
+                const overall = totalMaximum > 0
+                    ? totalMarks / totalMaximum * 100
+                    : 0;
+
+                setText(
+                    "studentName",
+                    `${student.first_name} ${student.last_name}`
+                );
+                setText("admissionNumber", student.admission_number);
+                setText("studentClass", student.class_name || "-");
+                setText("reportTerm", term);
+                setText("reportYear", year);
+                setText("subjectCount", savedResults.length);
+
+                setText("totalMarks", totalMarks.toFixed(2));
+                setText("totalMaximum", totalMaximum.toFixed(2));
+                setText("overallPercentage", `${overall.toFixed(2)}%`);
+
+                setText("summarySubjects", savedResults.length);
+                setText("summaryPercentage", `${overall.toFixed(2)}%`);
+                setText("summaryGrades", gradeCount);
+
+                setText(
+                    "teacherComments",
+                    comments.length
+                        ? comments.join(" | ")
+                        : "No teacher comments have been recorded for these results."
+                );
+
+                reportCard.classList.remove("hidden");
+                reportGenerated = true;
+
+                showMessage(
+                    "Multi-subject report card generated successfully.",
+                    true
+                );
+            } catch (error) {
+                resetReport();
+                showMessage("Could not generate report: " + error.message);
+            }
+        }
+
+        document.getElementById("generateBtn").addEventListener(
+            "click",
+            generateReport
+        );
+
+        document.getElementById("printBtn").addEventListener(
+            "click",
+            function() {
+                if (!reportGenerated) {
+                    showMessage("Generate a report card before printing.");
+                    return;
+                }
+
+                window.print();
+            }
+        );
+
+        studentSelect.addEventListener("change", resetReport);
+        termSelect.addEventListener("change", resetReport);
+        yearSelect.addEventListener("change", resetReport);
+
+        loadData();
+    </script>
+</body>
+</html>

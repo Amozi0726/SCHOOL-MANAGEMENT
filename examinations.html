@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examinations Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 24px 6%;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+            font-size: 27px;
+        }
+
+        header p {
+            color: #dce7f5;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel h3 {
+            margin-bottom: 22px;
+            color: #17365d;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #2563eb;
+        }
+
+        .form-actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #17365d;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #244c7c;
+        }
+
+        .reset-btn {
+            background: #e2e8f0;
+            color: #243247;
+        }
+
+        #message {
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+            padding: 28px;
+        }
+
+        @media (max-width: 800px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Management System</h1>
+        <p>Examinations Management</p>
+    </header>
+
+    <main>
+        <div class="page-heading">
+            <h2>Examinations</h2>
+            <p>Create examinations and view the examination schedule.</p>
+        </div>
+
+        <section class="panel">
+            <h3>Add New Examination</h3>
+
+            <form id="examForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="exam_name">Examination Name</label>
+                        <input id="exam_name" name="exam_name"
+                               placeholder="e.g. End Term Exam" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject_id">Subject</label>
+                        <select id="subject_id" name="subject_id" required>
+                            <option value="">Loading subjects...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class_name">Class</label>
+                        <input id="class_name" name="class_name"
+                               placeholder="e.g. Form 1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="term">Term</label>
+                        <select id="term" name="term" required>
+                            <option value="">Select term</option>
+                            <option value="Term 1">Term 1</option>
+                            <option value="Term 2">Term 2</option>
+                            <option value="Term 3">Term 3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exam_date">Examination Date</label>
+                        <input type="date" id="exam_date"
+                               name="exam_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="max_marks">Maximum Marks</label>
+                        <input type="number" id="max_marks" name="max_marks"
+                               min="0.01" step="0.01" value="100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="academic_year">Academic Year</label>
+                        <input id="academic_year" name="academic_year"
+                               placeholder="e.g. 2026" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="save-btn">
+                        Save Examination
+                    </button>
+
+                    <button type="reset" class="reset-btn">
+                        Clear Form
+                    </button>
+                </div>
+
+                <p id="message" role="status"></p>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h3>Examination Schedule</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Exam ID</th>
+                            <th>Examination</th>
+                            <th>Subject</th>
+                            <th>Class</th>
+                            <th>Term</th>
+                            <th>Date</th>
+                            <th>Maximum Marks</th>
+                            <th>Academic Year</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="examTableBody">
+                        <tr>
+                            <td colspan="8" class="empty">
+                                Loading examinations...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+        const examForm = document.getElementById("examForm");
+        const examTableBody = document.getElementById("examTableBody");
+        const subjectSelect = document.getElementById("subject_id");
+        const message = document.getElementById("message");
+
+        function showMessage(text, success = false) {
+            message.textContent = text;
+            message.style.color = success ? "#15803d" : "#dc2626";
+        }
+
+        async function loadSubjects() {
+            try {
+                const response = await fetch(`${API_URL}/subjects`);
+                const result = await response.json();
+
+                if (!response.ok || result.success === false) {
+                    throw new Error(result.message || "Could not load subjects.");
+                }
+
+                const subjects = Array.isArray(result)
+                    ? result
+                    : result.data;
+
+                if (!Array.isArray(subjects)) {
+                    throw new Error("Unexpected subjects response format.");
+                }
+
+                subjectSelect.innerHTML =
+                    '<option value="">Select subject</option>';
+
+                subjects.forEach(subject => {
+                    const option = document.createElement("option");
+                    option.value = subject.subject_id;
+                    option.textContent =
+                        `${subject.subject_name} (${subject.subject_code})`;
+
+                    subjectSelect.appendChild(option);
+                });
+
+                if (subjects.length === 0) {
+                    subjectSelect.innerHTML =
+                        '<option value="">Add subjects first</option>';
+                }
+            } catch (error) {
+                subjectSelect.innerHTML =
+                    '<option value="">Could not load subjects</option>';
+                showMessage(error.message);
+            }
+        }
+
+        async function loadExaminations() {
+            try {
+                const response = await fetch(`${API_URL}/examinations`);
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Could not load examinations."
+                    );
+                }
+
+                const examinations = result.data || [];
+                examTableBody.innerHTML = "";
+
+                if (examinations.length === 0) {
+                    examTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="empty">
+                                No examinations have been added yet.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                examinations.forEach(exam => {
+                    const row = document.createElement("tr");
+
+                    [
+                        exam.exam_id,
+                        exam.exam_name,
+                        exam.subject_name,
+                        exam.class_name,
+                        exam.term,
+                        exam.exam_date,
+                        exam.max_marks,
+                        exam.academic_year || "-"
+                    ].forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value ?? "";
+                        row.appendChild(cell);
+                    });
+
+                    examTableBody.appendChild(row);
+                });
+            } catch (error) {
+                examTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty">
+                            ${error.message}
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        examForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(examForm);
+            const exam = Object.fromEntries(formData.entries());
+
+            exam.subject_id = Number(exam.subject_id);
+            exam.max_marks = Number(exam.max_marks);
+
+            try {
+                const response = await fetch(`${API_URL}/examinations`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(exam)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Could not save examination."
+                    );
+                }
+
+                showMessage("Examination saved successfully!", true);
+                examForm.reset();
+                document.getElementById("max_marks").value = 100;
+
+                await loadExaminations();
+            } catch (error) {
+                showMessage(error.message);
+            }
+        });
+
+        loadSubjects();
+        loadExaminations();
+    </script>
+</body>
+</html>

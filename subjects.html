@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects Management | School System</title>
+    <link rel="stylesheet" href="subjects.css">
+    <script src="subjects.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <div>
+            <h1>Subjects Management</h1>
+            <p>Manage school subjects and subject codes</p>
+        </div>
+        <a href="dashboard.html" class="dashboard-link">Dashboard</a>
+    </header>
+
+    <main class="container">
+        <section class="stats">
+            <div class="stat-card">
+                <span>Total Subjects</span>
+                <strong id="totalSubjects">0</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2 id="formTitle">Register New Subject</h2>
+
+            <div id="message" class="message" role="status" hidden></div>
+
+            <form id="subjectForm">
+                <input type="hidden" id="subject_id">
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="subject_name">Subject Name *</label>
+                        <input id="subject_name" type="text"
+                               maxlength="100" required
+                               placeholder="e.g. Mathematics">
+                    </div>
+
+                    <div class="field">
+                        <label for="subject_code">Subject Code *</label>
+                        <input id="subject_code" type="text"
+                               maxlength="20" required
+                               placeholder="e.g. MATH01">
+                    </div>
+
+                    <div class="field full">
+                        <label for="description">Description</label>
+                        <textarea id="description" maxlength="255"
+                                  rows="3"
+                                  placeholder="Brief subject description"></textarea>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" id="saveButton">Register Subject</button>
+                    <button type="button" id="cancelButton"
+                            class="secondary" hidden>Cancel Edit</button>
+                    <button type="reset" class="secondary">Clear Form</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="table-heading">
+                <h2>Registered Subjects</h2>
+                <button type="button" id="refreshButton"
+                        class="secondary">Refresh</button>
+            </div>
+
+            <input type="search" id="searchInput"
+                   class="search" placeholder="Search subjects by name or code...">
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject Name</th>
+                            <th>Subject Code</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectTableBody">
+                        <tr>
+                            <td colspan="5">Loading subjects...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

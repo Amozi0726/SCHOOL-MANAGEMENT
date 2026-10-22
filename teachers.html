@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers Management | School Management System</title>
+    <link rel="stylesheet" href="teachers.css">
+    <script src="teachers.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">SCHOOL MANAGEMENT SYSTEM</p>
+            <h1>Teachers Management</h1>
+            <p class="subtitle">Manage teacher records and professional details.</p>
+        </div>
+        <a class="back-link" href="dashboard.html">← Dashboard</a>
+    </header>
+
+    <main class="container">
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-icon">♙</span>
+                <div>
+                    <p>Total Teachers</p>
+                    <h2 id="teacherCount">0</h2>
+                </div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">▤</span>
+                <div>
+                    <p>Subjects Covered</p>
+                    <h2 id="subjectCount">0</h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="section-heading">
+                <div>
+                    <h2 id="formTitle">Register a Teacher</h2>
+                    <p>Fields marked * are required.</p>
+                </div>
+            </div>
+
+            <div id="message" class="message" role="status"
+                 aria-live="polite" hidden></div>
+
+            <form id="teacherForm">
+                <input type="hidden" id="teacher_id">
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="first_name">First Name *</label>
+                        <input type="text" id="first_name"
+                               maxlength="50" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="last_name">Last Name *</label>
+                        <input type="text" id="last_name"
+                               maxlength="50" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" maxlength="20"
+                               placeholder="e.g. 0712345678">
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" maxlength="100"
+                               placeholder="teacher@example.com">
+                    </div>
+
+                    <div class="field">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject"
+                               maxlength="100" required
+                               placeholder="e.g. Mathematics">
+                    </div>
+
+                    <div class="field">
+                        <label for="qualification">Qualification</label>
+                        <input type="text" id="qualification"
+                               maxlength="150"
+                               placeholder="e.g. B.Ed">
+                    </div>
+
+                    <div class="field">
+                        <label for="hire_date">Hire Date</label>
+                        <input type="date" id="hire_date">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitButton"
+                            class="btn btn-primary">Register Teacher</button>
+                    <button type="button" id="cancelEdit"
+                            class="btn btn-light" hidden>Cancel Edit</button>
+                    <button type="reset" id="clearForm"
+                            class="btn btn-light">Clear Form</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="list-heading">
+                <div>
+                    <h2>Registered Teachers</h2>
+                    <p>Teacher records saved in the school database.</p>
+                </div>
+                <button type="button" id="refreshButton"
+                        class="btn btn-light">↻ Refresh</button>
+            </div>
+
+            <div class="search-row">
+                <input type="search" id="searchInput"
+                       placeholder="Search by name, email or subject..."
+                       aria-label="Search teachers">
+                <span id="resultCount">0 records</span>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Teacher</th>
+                            <th>Contact</th>
+                            <th>Subject</th>
+                            <th>Qualification</th>
+                            <th>Hire Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacherTableBody">
+                        <tr>
+                            <td colspan="7" class="empty">
+                                Loading teachers...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <p class="footer-note">
+            School Management System · Teachers Module
+        </p>
+    </main>
+</body>
+</html>

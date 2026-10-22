@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Results Reports | School Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 24px 6%;
+        }
+
+        header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #dce7f5;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel h3 {
+            color: #17365d;
+            margin-bottom: 18px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 18px;
+            align-items: end;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+        }
+
+        button {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background: #17365d;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #244c7c;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #243247;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .report-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+        }
+
+        .report-header h2 {
+            color: #17365d;
+            margin-bottom: 12px;
+        }
+
+        .report-details {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .report-details p {
+            color: #475569;
+            margin-bottom: 5px;
+        }
+
+        .report-details strong {
+            color: #243247;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            padding: 20px;
+            min-width: 0;
+        }
+
+        .summary-card p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .summary-card h3 {
+            color: #17365d;
+            font-size: 25px;
+            overflow-wrap: anywhere;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .grade {
+            font-weight: bold;
+            color: #17365d;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        .note {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 800px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .report-details {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 14px;
+            }
+
+            .summary-card h3 {
+                font-size: 21px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            header {
+                background: white;
+                color: black;
+                padding: 10px 0;
+                border-bottom: 2px solid #17365d;
+            }
+
+            header p {
+                color: #333;
+            }
+
+            main {
+                max-width: none;
+                margin: 15px 0;
+                padding: 0;
+            }
+
+            .no-print,
+            .filter-panel,
+            #message {
+                display: none !important;
+            }
+
+            .panel,
+            .summary-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            table {
+                min-width: 0;
+            }
+
+            th, td {
+                padding: 8px 5px;
+                font-size: 10px;
+            }
+
+            .table-container {
+                overflow: visible;
+            }
+
+            .report-header h2,
+            .panel h3,
+            .summary-card h3 {
+                color: black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Management System</h1>
+        <p>Academic Performance and Class Results Reports</p>
+    </header>
+
+    <main>
+        <div class="page-heading">
+            <h2>Class Results Reports</h2>
+            <p>Review examination performance and print class results.</p>
+        </div>
+
+        <section class="panel filter-panel no-print">
+            <h3>Select Examination</h3>
+
+            <div class="filter-grid">
+                <div>
+                    <label for="examSelect">Examination</label>
+                    <select id="examSelect">
+                        <option value="">Loading examinations...</option>
+                    </select>
+                </div>
+
+                <button type="button" class="primary-btn"
+                        id="viewBtn">
+                    View Report
+                </button>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="secondary-btn"
+                        id="refreshBtn">
+                    Refresh Report
+                </button>
+
+                <button type="button" class="primary-btn"
+                        id="printBtn">
+                    Print Report
+                </button>
+            </div>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section class="panel" id="reportSection">
+            <div class="report-header">
+                <h2>Class Examination Report</h2>
+
+                <div class="report-details">
+                    <p>Examination: <strong id="examName">-</strong></p>
+                    <p>Subject: <strong id="subjectName">-</strong></p>
+                    <p>Class: <strong id="className">-</strong></p>
+                    <p>Term: <strong id="termName">-</strong></p>
+                    <p>Academic Year: <strong id="academicYear">-</strong></p>
+                    <p>Maximum Marks: <strong id="maxMarks">-</strong></p>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <p>Students with Results</p>
+                    <h3 id="totalStudents">0</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Class Average</p>
+                    <h3 id="classAverage">-</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Highest Marks</p>
+                    <h3 id="highestMarks">-</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Lowest Marks</p>
+                    <h3 id="lowestMarks">-</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Students Passed</p>
+                    <h3 id="passedCount">0</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Students Failed</p>
+                    <h3 id="failedCount">0</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Pass Rate</p>
+                    <h3 id="passRate">0%</h3>
+                </div>
+
+                <div class="summary-card">
+                    <p>Average Percentage</p>
+                    <h3 id="averagePercentage">0%</h3>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Student Performance</h3>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Admission No.</th>
+                                <th>Student Name</th>
+                                <th>Marks</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="reportTableBody">
+                            <tr>
+                                <td colspan="7" class="empty">
+                                    Select an examination to view its report.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="note">
+                    Pass rate uses a threshold of 50% of the examination's
+                    maximum marks. Confirm this threshold matches your
+                    school's grading policy.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const examSelect = document.getElementById("examSelect");
+        const message = document.getElementById("message");
+        const reportTableBody = document.getElementById("reportTableBody");
+
+        let examinations = [];
+
+        function showMessage(text, success = false) {
+            message.textContent = text;
+            message.style.color = success ? "#15803d" : "#dc2626";
+        }
+
+        async function getApiData(url) {
+            const response = await fetch(url);
+            const result = await response.json();
+
+            if (!response.ok || result.success === false) {
+                throw new Error(
+                    result.message || "The request could not be completed."
+                );
+            }
+
+            const data = Array.isArray(result) ? result : result.data;
+
+            if (!Array.isArray(data)) {
+                throw new Error("The server returned an unexpected response.");
+            }
+
+            return data;
+        }
+
+        function setText(id, value) {
+            document.getElementById(id).textContent = value ?? "-";
+        }
+
+        function clearSummary() {
+            setText("totalStudents", "0");
+            setText("classAverage", "-");
+            setText("highestMarks", "-");
+            setText("lowestMarks", "-");
+            setText("passedCount", "0");
+            setText("failedCount", "0");
+            setText("passRate", "0%");
+            setText("averagePercentage", "0%");
+        }
+
+        function showEmptyTable(text) {
+            reportTableBody.replaceChildren();
+
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 7;
+            cell.className = "empty";
+            cell.textContent = text;
+
+            row.appendChild(cell);
+            reportTableBody.appendChild(row);
+        }
+
+        async function loadExaminations() {
+            try {
+                examinations = await getApiData(
+                    `${API_URL}/examinations`
+                );
+
+                examSelect.replaceChildren(
+                    new Option("Select examination", "")
+                );
+
+                examinations.forEach(exam => {
+                    const label =
+                        `${exam.exam_name} - ${exam.class_name} - ` +
+                        `${exam.term} (${exam.academic_year || "No year"})`;
+
+                    examSelect.add(new Option(label, exam.exam_id));
+                });
+
+                if (examinations.length === 0) {
+                    showMessage("No examinations are available yet.");
+                    return;
+                }
+
+                showMessage("Examinations loaded successfully.", true);
+            } catch (error) {
+                showMessage("Could not load examinations: " + error.message);
+            }
+        }
+
+        async function loadReport() {
+            const examId = examSelect.value;
+
+            if (!examId) {
+                showMessage("Please select an examination.");
+                return;
+            }
+
+            const exam = examinations.find(
+                item => String(item.exam_id) === examId
+            );
+
+            if (!exam) {
+                showMessage("The selected examination could not be found.");
+                return;
+            }
+
+            showMessage("Loading class results...");
+            showEmptyTable("Loading results...");
+            clearSummary();
+
+            try {
+                const results = await getApiData(
+                    `${API_URL}/exam-results?exam_id=` +
+                    encodeURIComponent(examId)
+                );
+
+                setText("examName", exam.exam_name);
+                setText("subjectName", exam.subject_name);
+                setText("className", exam.class_name);
+                setText("termName", exam.term);
+                setText("academicYear", exam.academic_year || "-");
+                setText("maxMarks", exam.max_marks);
+
+                if (results.length === 0) {
+                    showEmptyTable(
+                        "No results have been recorded for this examination."
+                    );
+                    showMessage(
+                        "Examination loaded. There are no results to report.",
+                        true
+                    );
+                    return;
+                }
+
+                const maxMarks = Number(exam.max_marks);
+
+                if (!Number.isFinite(maxMarks) || maxMarks <= 0) {
+                    throw new Error(
+                        "The examination has an invalid maximum mark value."
+                    );
+                }
+
+                const normalizedResults = results.map(result => {
+                    const marks = Number(result.marks_obtained);
+
+                    if (!Number.isFinite(marks)) {
+                        throw new Error(
+                            "A saved result contains invalid marks."
+                        );
+                    }
+
+                    return {
+                        ...result,
+                        marks,
+                        percentage: marks / maxMarks * 100
+                    };
+                });
+
+                const marksList = normalizedResults.map(r => r.marks);
+
+                const totalMarks = marksList.reduce(
+                    (sum, marks) => sum + marks, 0
+                );
+
+                const average = totalMarks / normalizedResults.length;
+                const highest = Math.max(...marksList);
+                const lowest = Math.min(...marksList);
+
+                // Passing threshold: 50% of maximum marks.
+                const passed = normalizedResults.filter(
+                    result => result.percentage >= 50
+                ).length;
+
+                const failed = normalizedResults.length - passed;
+                const passRate = passed / normalizedResults.length * 100;
+                const averagePercentage = average / maxMarks * 100;
+
+                setText("totalStudents", normalizedResults.length);
+                setText(
+                    "classAverage",
+                    `${average.toFixed(2)} / ${maxMarks}`
+                );
+                setText("highestMarks", highest.toFixed(2));
+                setText("lowestMarks", lowest.toFixed(2));
+                setText("passedCount", passed);
+                setText("failedCount", failed);
+                setText("passRate", `${passRate.toFixed(1)}%`);
+                setText(
+                    "averagePercentage",
+                    `${averagePercentage.toFixed(2)}%`
+                );
+
+                reportTableBody.replaceChildren();
+
+                normalizedResults.forEach((result, index) => {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        index + 1,
+                        result.admission_number,
+                        `${result.first_name || ""} ${result.last_name || ""}`.trim(),
+                        `${result.marks.toFixed(2)} / ${maxMarks}`,
+                        `${result.percentage.toFixed(2)}%`,
+                        result.grade || "-",
+                        result.remarks || "-"
+                    ];
+
+                    values.forEach((value, columnIndex) => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value ?? "";
+
+                        if (columnIndex === 5) {
+                            cell.className = "grade";
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    reportTableBody.appendChild(row);
+                });
+
+                showMessage("Class results report loaded successfully.", true);
+            } catch (error) {
+                showEmptyTable("Unable to load the results report.");
+                showMessage(error.message);
+            }
+        }
+
+        document.getElementById("viewBtn").addEventListener(
+            "click", loadReport
+        );
+
+        document.getElementById("refreshBtn").addEventListener(
+            "click", loadReport
+        );
+
+        document.getElementById("printBtn").addEventListener(
+            "click", function() {
+                if (!examSelect.value) {
+                    showMessage("Select an examination before printing.");
+                    return;
+                }
+
+                window.print();
+            }
+        );
+
+        loadExaminations();
+    </script>
+</body>
+</html>

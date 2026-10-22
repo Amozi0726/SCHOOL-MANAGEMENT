@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #243247;
+        }
+
+        header {
+            background: #17365d;
+            color: white;
+            padding: 24px 6%;
+        }
+
+        header h1 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #dce7f5;
+        }
+
+        main {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .panel h3 {
+            color: #17365d;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            background: #17365d;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #244c7c;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #243247;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .grade {
+            font-weight: bold;
+            color: #17365d;
+        }
+
+        @media (max-width: 800px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Management System</h1>
+        <p>Exam Results Management</p>
+    </header>
+
+    <main>
+        <div class="page-heading">
+            <h2>Student Examination Results</h2>
+            <p>Record marks, calculate grades and review examination performance.</p>
+        </div>
+
+        <section class="panel">
+            <h3>Enter Student Marks</h3>
+
+            <form id="resultForm">
+                <div class="form-grid">
+                    <div>
+                        <label for="exam_id">Examination</label>
+                        <select id="exam_id" required>
+                            <option value="">Loading examinations...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="student_id">Student</label>
+                        <select id="student_id" required>
+                            <option value="">Loading students...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="marks_obtained">Marks Obtained</label>
+                        <input
+                            type="number"
+                            id="marks_obtained"
+                            min="0"
+                            step="0.01"
+                            placeholder="Enter marks"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="primary-btn">
+                        Save Result
+                    </button>
+
+                    <button type="reset" class="secondary-btn">
+                        Clear Form
+                    </button>
+                </div>
+
+                <p id="message" role="status"></p>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h3>Recorded Results</h3>
+
+            <div class="form-grid" style="margin-bottom: 20px;">
+                <div>
+                    <label for="filter_exam">Select Examination</label>
+                    <select id="filter_exam">
+                        <option value="">Select examination</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission No.</th>
+                            <th>Student Name</th>
+                            <th>Examination</th>
+                            <th>Marks</th>
+                            <th>Grade</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="resultsTableBody">
+                        <tr>
+                            <td colspan="6" class="empty">
+                                Select an examination to view results.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const examSelect = document.getElementById("exam_id");
+        const studentSelect = document.getElementById("student_id");
+        const marksInput = document.getElementById("marks_obtained");
+        const filterExam = document.getElementById("filter_exam");
+        const resultForm = document.getElementById("resultForm");
+        const resultsTableBody = document.getElementById("resultsTableBody");
+        const message = document.getElementById("message");
+
+        let examinations = [];
+        let students = [];
+
+        function showMessage(text, success = false) {
+            message.textContent = text;
+            message.style.color = success ? "#15803d" : "#dc2626";
+        }
+
+        async function fetchData(url) {
+            const response = await fetch(url);
+            const result = await response.json();
+
+            if (!response.ok || result.success === false) {
+                throw new Error(result.message || "Unable to load data.");
+            }
+
+            return Array.isArray(result) ? result : result.data;
+        }
+
+        async function loadExaminations() {
+            try {
+                examinations = await fetchData(`${API_URL}/examinations`);
+
+                examSelect.innerHTML =
+                    '<option value="">Select examination</option>';
+
+                filterExam.innerHTML =
+                    '<option value="">Select examination</option>';
+
+                examinations.forEach(exam => {
+                    const label =
+                        `${exam.exam_name} - ${exam.class_name} (${exam.term})`;
+
+                    const option1 = new Option(label, exam.exam_id);
+                    const option2 = new Option(label, exam.exam_id);
+
+                    examSelect.add(option1);
+                    filterExam.add(option2);
+                });
+
+                updateMarksLimit();
+
+                if (examinations.length === 0) {
+                    showMessage("Add an examination before recording results.");
+                }
+            } catch (error) {
+                showMessage("Could not load examinations: " + error.message);
+            }
+        }
+
+        async function loadStudents() {
+            try {
+                students = await fetchData(`${API_URL}/students`);
+
+                studentSelect.innerHTML =
+                    '<option value="">Select student</option>';
+
+                students.forEach(student => {
+                    const fullName =
+                        `${student.first_name} ${student.last_name}`;
+
+                    const option = new Option(
+                        `${fullName} (${student.admission_number})`,
+                        student.student_id
+                    );
+
+                    studentSelect.add(option);
+                });
+
+                if (students.length === 0) {
+                    studentSelect.innerHTML =
+                        '<option value="">No students available</option>';
+                }
+            } catch (error) {
+                studentSelect.innerHTML =
+                    '<option value="">Could not load students</option>';
+
+                showMessage("Could not load students: " + error.message);
+            }
+        }
+
+        function updateMarksLimit() {
+            const selectedExam = examinations.find(
+                exam => String(exam.exam_id) === examSelect.value
+            );
+
+            if (selectedExam) {
+                marksInput.max = selectedExam.max_marks;
+                marksInput.placeholder =
+                    `Enter marks out of ${selectedExam.max_marks}`;
+            } else {
+                marksInput.removeAttribute("max");
+                marksInput.placeholder = "Enter marks";
+            }
+        }
+
+        examSelect.addEventListener("change", updateMarksLimit);
+
+        resultForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const examId = Number(examSelect.value);
+            const studentId = Number(studentSelect.value);
+            const marks = Number(marksInput.value);
+
+            const selectedExam = examinations.find(
+                exam => Number(exam.exam_id) === examId
+            );
+
+            if (!selectedExam) {
+                showMessage("Please select an examination.");
+                return;
+            }
+
+            if (!studentId) {
+                showMessage("Please select a student.");
+                return;
+            }
+
+            if (!Number.isFinite(marks) ||
+                marks < 0 ||
+                marks > Number(selectedExam.max_marks)) {
+                showMessage(
+                    `Marks must be between 0 and ${selectedExam.max_marks}.`
+                );
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/exam-results`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        exam_id: examId,
+                        student_id: studentId,
+                        marks_obtained: marks
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Could not save the result."
+                    );
+                }
+
+                showMessage("Result saved successfully!", true);
+
+                filterExam.value = String(examId);
+                await loadResults(examId);
+
+                // Keep the selected examination for faster entry.
+                studentSelect.value = "";
+                marksInput.value = "";
+            } catch (error) {
+                showMessage(error.message);
+            }
+        });
+
+        async function loadResults(examId) {
+            if (!examId) {
+                resultsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Select an examination to view results.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            resultsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">Loading results...</td>
+                </tr>`;
+
+            try {
+                const results = await fetchData(
+                    `${API_URL}/exam-results?exam_id=${encodeURIComponent(examId)}`
+                );
+
+                resultsTableBody.innerHTML = "";
+
+                if (results.length === 0) {
+                    resultsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty">
+                                No results recorded for this examination.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                results.forEach(result => {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        result.admission_number,
+                        `${result.first_name} ${result.last_name}`,
+                        result.exam_name,
+                        result.marks_obtained,
+                        result.grade,
+                        result.remarks || "-"
+                    ];
+
+                    values.forEach((value, index) => {
+                        const cell = document.createElement("td");
+                        cell.textContent = value ?? "";
+
+                        if (index === 4) {
+                            cell.className = "grade";
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    resultsTableBody.appendChild(row);
+                });
+            } catch (error) {
+                resultsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty">
+                            ${error.message}
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        filterExam.addEventListener("change", function() {
+            loadResults(filterExam.value);
+        });
+
+        loadExaminations();
+        loadStudents();
+    </script>
+</body>
+</html>

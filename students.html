@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage student registration and records.">
+    <title>Students Management | School Management System</title>
+    <link rel="stylesheet" href="students.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-logo">SMS</div>
+            <div>
+                <h1>School Management System</h1>
+                <p>Administration Portal</p>
+            </div>
+        </div>
+        <a href="dashboard.html" class="dashboard-link">Dashboard</a>
+    </header>
+
+    <main class="page-container">
+
+        <section class="page-intro">
+            <div>
+                <p class="eyebrow">STUDENT ADMINISTRATION</p>
+                <h2>Students Management</h2>
+                <p class="intro-text">
+                    Register students and manage their academic records.
+                </p>
+            </div>
+            <span class="status-label">Management Portal</span>
+        </section>
+
+        <section class="summary-grid">
+            <article class="summary-card">
+                <div>
+                    <p>Total Registered Students</p>
+                    <h3 id="studentCount">0</h3>
+                    <span class="summary-note">All student records</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h3 id="formTitle">Register New Student</h3>
+                    <p>Fields marked with * are required.</p>
+                </div>
+            </div>
+
+            <form id="studentForm">
+                <input type="hidden" id="student_id">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="admission_number">Admission Number *</label>
+                        <input type="text" id="admission_number"
+                               placeholder="e.g. ADM004" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="first_name">First Name *</label>
+                        <input type="text" id="first_name"
+                               placeholder="Enter first name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name *</label>
+                        <input type="text" id="last_name"
+                               placeholder="Enter last name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date_of_birth">Date of Birth</label>
+                        <input type="date" id="date_of_birth">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class_name">Class *</label>
+                        <input type="text" id="class_name"
+                               placeholder="e.g. Form 1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone"
+                               placeholder="e.g. 0712345678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email"
+                               placeholder="e.g. student@example.com">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveButton" class="btn-primary">
+                        Save Student
+                    </button>
+                    <button type="button" id="cancelButton"
+                            class="btn-secondary" hidden>
+                        Cancel
+                    </button>
+                </div>
+
+                <p id="message" class="message" role="status"
+                   aria-live="polite"></p>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="records-heading">
+                <div>
+                    <h3>Registered Students</h3>
+                    <p>Search and manage existing student records.</p>
+                </div>
+
+                <div class="search-box">
+                    <label for="searchInput">Search records</label>
+                    <input type="search" id="searchInput"
+                           placeholder="Name, admission no., class..."
+                           autocomplete="off">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission No.</th>
+                            <th>Student Name</th>
+                            <th>Gender</th>
+                            <th>Class</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                Loading student records...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="table-note">Student records are loaded from the school database.</p>
+        </section>
+
+        <footer class="page-footer">
+            School Management System · Student Administration
+        </footer>
+
+    </main>
+
+    <script src="students.js"></script>
+</body>
+</html>

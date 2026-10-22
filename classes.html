@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes Management | School MS</title>
+    <link rel="stylesheet" href="classes.css">
+</head>
+<body>
+
+    <header class="header">
+        <div>
+            <h1>School Management System</h1>
+            <p>Classes Management</p>
+        </div>
+        <a href="dashboard.html" class="back-button">Back to Dashboard</a>
+    </header>
+
+    <main class="container">
+
+        <section class="intro">
+            <h2>Manage Classes</h2>
+            <p>Register, view, edit and delete school classes.</p>
+        </section>
+
+        <!-- Class Registration Form -->
+        <section class="panel">
+            <h2 id="formTitle">Register a Class</h2>
+
+            <form id="classForm">
+                <input type="hidden" id="class_id">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="class_name">Class Name *</label>
+                        <input
+                            type="text"
+                            id="class_name"
+                            placeholder="e.g. Form 1"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class_teacher">Class Teacher</label>
+                        <input
+                            type="text"
+                            id="class_teacher"
+                            placeholder="Enter teacher's name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="room_number">Room Number</label>
+                        <input
+                            type="text"
+                            id="room_number"
+                            placeholder="e.g. Room 1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="academic_year">Academic Year</label>
+                        <input
+                            type="text"
+                            id="academic_year"
+                            placeholder="e.g. 2026">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="saveButton" class="primary-button">
+                        Save Class
+                    </button>
+
+                    <button type="button" id="cancelButton" class="secondary-button" hidden>
+                        Cancel Edit
+                    </button>
+                </div>
+
+                <p id="message" role="status"></p>
+            </form>
+        </section>
+
+        <!-- Registered Classes Table -->
+        <section class="panel">
+            <div class="table-heading">
+                <div>
+                    <h2>Registered Classes</h2>
+                    <p id="classCount">Loading classes...</p>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search classes...">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Class Name</th>
+                            <th>Class Teacher</th>
+                            <th>Room Number</th>
+                            <th>Academic Year</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="classTableBody">
+                        <tr>
+                            <td colspan="5">Loading classes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>School Management System &copy; 2026</p>
+    </footer>
+
+    <script src="classes.js"></script>
+</body>
+</html>
